@@ -14,7 +14,8 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddScoped<IRabbitMqSender, RabbitMqSender>();
+builder.Services.AddScoped<IRabbitMqSenderDirect, RabbitMqSenderDirect>();
+builder.Services.AddScoped<IRabbitMqSenderFanout, RabbitMqSenderFanout>();
 builder.Services.AddScoped<IKaffkaSender, KaffkaSender>();
 builder.Services.AddScoped<IAzureServiceBusSender, AzureServiceBusSenderQueue>();
 builder.Services.AddScoped<IAzureServiceBusSenderTopic, AzureServiceBusSenderTopic>();

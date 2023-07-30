@@ -15,7 +15,7 @@ namespace AzureServiceBusSubscriber
         public AzureServiceBusClientTopic(IConfiguration configuration, ILogger<AzureServiceBusClientTopic> logger)
         {
             _configuration = configuration;
-            _subscriptionName = configuration["SUBSCRIPTION_NAME"];
+            _subscriptionName = Environment.GetEnvironmentVariable("SUBSCRIPTION_NAME");
             _logger = logger;
             _logger.LogInformation("Subscription", _subscriptionName);
         }

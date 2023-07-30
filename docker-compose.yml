@@ -1,15 +1,75 @@
 version: '3'
 services:
-  rabbitmqsubscriber:
+  rabbitmqsubscriberdirectexchange:
     build:
       context: .
-      dockerfile: RabbitmqSubscriber/Dockerfile
+      dockerfile: RabbitmqSubscriberDirectExchange/Dockerfile
     ports:
       - 8081:80
     depends_on:
       - rabbitmq
     networks:
       - mynetwork
+  rabbitmqsubscriberfanoutexchange1:
+    build:
+      context: .
+      dockerfile: RabbitmqSubscriberFanoutExchange/Dockerfile
+    ports:
+      - 8089:80
+    depends_on:
+      - rabbitmq
+    environment:
+      - QUEUE_NAME=consumer1
+    networks:
+      - mynetwork
+  rabbitmqsubscriberfanoutexchange2:
+    build:
+      context: .
+      dockerfile: RabbitmqSubscriberFanoutExchange/Dockerfile
+    ports:
+      - 8090:80
+    depends_on:
+      - rabbitmq
+    environment:
+      - QUEUE_NAME=consumer2
+    networks:
+      - mynetwork
+  rabbitmqsubscriberfanoutexchange3:
+    build:
+      context: .
+      dockerfile: RabbitmqSubscriberFanoutExchange/Dockerfile
+    ports:
+      - 8091:80
+    depends_on:
+      - rabbitmq
+    environment:
+      - QUEUE_NAME=consumer3
+    networks:
+      - mynetwork
+  rabbitmqsubscriberfanoutexchange4:
+    build:
+      context: .
+      dockerfile: RabbitmqSubscriberFanoutExchange/Dockerfile
+    ports:
+      - 8092:80
+    depends_on:
+      - rabbitmq
+    environment:
+      - QUEUE_NAME=consumer4
+    networks:
+      - mynetwork
+  rabbitmqsubscriberfanoutexchange5:
+    build:
+      context: .
+      dockerfile: RabbitmqSubscriberFanoutExchange/Dockerfile
+    ports:
+      - 8093:80
+    depends_on:
+      - rabbitmq
+    environment:
+      - QUEUE_NAME=consumer5
+    networks:
+      - mynetwork     
   publisher:
     build:
       context: .
@@ -28,7 +88,7 @@ services:
       - 8082:80
     networks:
       - mynetwork
-  azureservicebussubscriberQueue:
+  azureservicebussubscriberqueue:
     build:
       context: .
       dockerfile: AzureServiceBusSubscriberQueue/Dockerfile
@@ -36,7 +96,7 @@ services:
       - 8083:80
     networks:
       - mynetwork
-azureservicebussubscriberTopic:
+  azureservicebussubscribertopic1:
     build:
       context: .
       dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
@@ -46,7 +106,7 @@ azureservicebussubscriberTopic:
       - SUBSCRIPTION_NAME=sub1
     networks:
       - mynetwork
-azureservicebussubscriberTopic2:
+  azureservicebussubscribertopic2:
     build:
       context: .
       dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
@@ -56,37 +116,37 @@ azureservicebussubscriberTopic2:
       - SUBSCRIPTION_NAME=sub2
     networks:
       - mynetwork
-azureservicebussubscriberTopic3:
+  azureservicebussubscribertopic3:
     build:
       context: .
       dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
     ports:
-      - 8085:80
+      - 8086:80
     environment:
       - SUBSCRIPTION_NAME=sub3
     networks:
       - mynetwork
-azureservicebussubscriberTopic4:
+  azureservicebussubscribertopic4:
     build:
       context: .
       dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
     ports:
-      - 8085:80
+      - 8087:80
     environment:
       - SUBSCRIPTION_NAME=sub4
     networks:
       - mynetwork
-azureservicebussubscriberTopic5:
+  azureservicebussubscribertopic5:
     build:
       context: .
       dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
     ports:
-      - 8085:80
+      - 8088:80
     environment:
       - SUBSCRIPTION_NAME=sub5
     networks:
       - mynetwork
-rabbitmq:
+  rabbitmq:
     image: rabbitmq:3-management
     ports:
       - 5672:5672

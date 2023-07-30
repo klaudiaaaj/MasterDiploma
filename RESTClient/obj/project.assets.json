@@ -1719,19 +1719,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\klaud\\.nuget\\packages\\": {}
+    "C:\\Users\\kjanecka\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\RESTClient\\RESTClient.csproj",
+      "projectUniqueName": "C:\\Users\\kjanecka\\MasterDiploma\\RESTClient\\RESTClient.csproj",
       "projectName": "RESTClient",
-      "projectPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\RESTClient\\RESTClient.csproj",
-      "packagesPath": "C:\\Users\\klaud\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\RESTClient\\obj\\",
+      "projectPath": "C:\\Users\\kjanecka\\MasterDiploma\\RESTClient\\RESTClient.csproj",
+      "packagesPath": "C:\\Users\\kjanecka\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kjanecka\\MasterDiploma\\RESTClient\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\klaud\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kjanecka\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1739,8 +1744,10 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/openskydatasystems/_packaging/OSDS-NUGET/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {

@@ -8939,19 +8939,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\klaud\\.nuget\\packages\\": {}
+    "C:\\Users\\kjanecka\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\AzureServiceBusSubscriberTopic\\AzureServiceBusSubscriberTopic.csproj",
+      "projectUniqueName": "C:\\Users\\kjanecka\\MasterDiploma\\AzureServiceBusSubscriberTopic\\AzureServiceBusSubscriberTopic.csproj",
       "projectName": "AzureServiceBusSubscriberTopic",
-      "projectPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\AzureServiceBusSubscriberTopic\\AzureServiceBusSubscriberTopic.csproj",
-      "packagesPath": "C:\\Users\\klaud\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\AzureServiceBusSubscriberTopic\\obj\\",
+      "projectPath": "C:\\Users\\kjanecka\\MasterDiploma\\AzureServiceBusSubscriberTopic\\AzureServiceBusSubscriberTopic.csproj",
+      "packagesPath": "C:\\Users\\kjanecka\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kjanecka\\MasterDiploma\\AzureServiceBusSubscriberTopic\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\klaud\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kjanecka\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8959,15 +8964,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/openskydatasystems/_packaging/OSDS-NUGET/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\Contracts.csproj": {
-              "projectPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\Contracts.csproj"
+            "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\Contracts.csproj": {
+              "projectPath": "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\Contracts.csproj"
             }
           }
         }

@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "UsvtOhMgPx+aYcnSG1A5aXJGYCLMXYB0oud0BjpNYGcPiW5r+Kl2X2tK1pthsmu/Qrk1dHqMD1AnCzUW3V85RA==",
+  "dgSpecHash": "D9E7r01xEASDavIUMj2Q+7Ht5A6Cq0+Nvj0Ip1SjQ41/jbWMf2hscSVQF0d+uh1xgY448KXVYqVYjtEfCRlUPw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\MetricsAnalyser\\MetricsAnalyser.csproj",
+  "projectFilePath": "C:\\Users\\kjanecka\\MasterDiploma\\MetricsAnalyser\\MetricsAnalyser.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\klaud\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.14.0\\microsoft.visualstudio.azure.containers.tools.targets.1.14.0.nupkg.sha512"
+    "C:\\Users\\kjanecka\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.14.0\\microsoft.visualstudio.azure.containers.tools.targets.1.14.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -7,32 +7,42 @@ namespace Publisher.Controllers
     [Route("api/publisher/produce")]
     public class CommunicationController : Controller
     {
-        public readonly IRabbitMqSender rabbitMqSender;
+        public readonly IRabbitMqSenderDirect rabbitMqSenderDirect;
+        public readonly IRabbitMqSenderFanout rabbitMqSenderFanout;
         public readonly IKaffkaSender kaffkaSender;
         public readonly IAzureServiceBusSender azureServiceBusSenderQueue;
         public readonly IAzureServiceBusSenderTopic azureServiceBusSenderTopic;
         public readonly IDataProducerService dataProducerService;
         public readonly ISqLiteRepo sqLiteRepo;
 
-        public CommunicationController(IRabbitMqSender rabbitMqSender, IKaffkaSender kaffkaSender, IAzureServiceBusSender azureServiceBusSender, IDataProducerService dataProducerService, ISqLiteRepo sqLiteRepo, IAzureServiceBusSenderTopic azureServiceBusSenderTopic)
+        public CommunicationController(IRabbitMqSenderDirect rabbitMqSender, IKaffkaSender kaffkaSender, IAzureServiceBusSender azureServiceBusSender, IDataProducerService dataProducerService, ISqLiteRepo sqLiteRepo, IAzureServiceBusSenderTopic azureServiceBusSenderTopic, IRabbitMqSenderFanout rabbitMqSenderFanout)
         {
-            this.rabbitMqSender = rabbitMqSender;
+            this.rabbitMqSenderDirect = rabbitMqSender;
             this.kaffkaSender = kaffkaSender;
             this.azureServiceBusSenderQueue = azureServiceBusSender;
             this.dataProducerService = dataProducerService;
             this.sqLiteRepo = sqLiteRepo;
             this.azureServiceBusSenderTopic = azureServiceBusSenderTopic;
+            this.rabbitMqSenderFanout = rabbitMqSenderFanout;
         }
 
-        [HttpPost("rabbitMq")]
-        public Task SendDataByRabbitMq()
+        [HttpPost("rabbitMq/direct")]
+        public Task SendDataByRabbitMqDirect()
         {
             var data = dataProducerService.GetJoysticData();
-            rabbitMqSender.Send(data);
+            rabbitMqSenderDirect.Send(data);
 
             return Task.CompletedTask;
         }
 
+        [HttpPost("rabbitMq/fanout")]
+        public Task SendDataByRabbitMqFanout()
+        {
+            var data = dataProducerService.GetJoysticData();
+            rabbitMqSenderFanout.Send(data);
+
+            return Task.CompletedTask;
+        }
 
         [HttpPost("kaffka")]
         public Task SendByKaffka()

@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\Contracts.csproj": {}
+    "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\Contracts.csproj": {}
   },
   "projects": {
-    "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\Contracts.csproj": {
+    "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\Contracts.csproj",
+        "projectUniqueName": "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\Contracts.csproj",
         "projectName": "Contracts",
-        "projectPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\Contracts.csproj",
-        "packagesPath": "C:\\Users\\klaud\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Contracts\\obj\\",
+        "projectPath": "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\Contracts.csproj",
+        "packagesPath": "C:\\Users\\kjanecka\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kjanecka\\MasterDiploma\\Contracts\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\klaud\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\kjanecka\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +26,9 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://pkgs.dev.azure.com/openskydatasystems/_packaging/OSDS-NUGET/nuget/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
