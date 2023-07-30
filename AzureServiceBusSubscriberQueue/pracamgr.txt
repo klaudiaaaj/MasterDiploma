@@ -698,32 +698,31 @@ Cloud providers also offer  the services which are responsible for the message a
 \chapter{Communication}
 This chapter will focus on analysis of a problem related to the performed experiments. The conducted research is aimed at demonstrating the effectiveness of a given technology in general terms and the functioning of the entire system.
 
-\section { The role of communication between microservices in the overall perception of a system}
+\section{The role of communication between microservices in the overall perception of a system}
 The communication between particular subsystems plays a significant role in functionality of  the entire  system. The communication is used for the following aims: 
 \begin{description}
-\item \textbf{Checks system coherence }\\
+  \item[\textbf{Checks system coherence}] \hfill \\
 Maintaining  the distributed system could be challenging because each subsystem can be written  in a  different time, by various developers and applied by various programming languages. The subsystems exchanges information and validates data again according to the previously predefined rules, to ensure that all the subservices operate within the specified constraints. The validation process checks the consistency of the data and cross-services dependencies and correlations  which guarantees the system coherence.
 Database translations integrity
 Maintaining the data consistency can be also a challenger to the distributed system. From the definition of microservices, each microservice should have separate instance of database. Even if each of the systems, performs a different operation, it could operate on the same set of data. In this situation if the data is modified by one system, the modifying system should notify other systems to update  their  databases  considering  a  conducted changes.
 
-\item \textbf{Collaboration of tasks synchronization}\\
+\item [\textbf{Collaboration of tasks synchronization}]\hfill \\
 Referring to the genesis of microservices architecture, the system is composed of  particular services where each subsystem is responsible for a  single functionality. The whole system collaborates to fulfil the business processes that span across different domains. Communication between them enables the opportunity to work together seamlessly to deliver complex business functionalities. Very often there is a necessity to exchange data in order to perform respective tasks. Communication between microservices plays a significant role in facilitating task synchronization by enabling the exchange of control signals, status updates, and coordination messages among the involved subservices.  Microservices can share the status of updates and progress information during the task execution, enabling other subservices to take appropriate action based on the status. It enables to have real-time transparency, allowing better monitoring and decision-making.
 
-\item \textbf{Database translations integrity}\\
+\item [\textbf{Database translations integrity}]\hfill \\
 Maintaining the data consistency can be also a challenger to the distributed system. From the definition of microservices, each microservice should have separate instance of database. Even if each of the systems, performs a different operation, it could operate on the same set of data. In this situation if the data is modified by one system, the modifying system should notify other systems to update  their  databases  considering  a  conducted changes.
 \item \textbf{Fault tolerance}\\
-Communication between microservices plays a considerable role in achieving  an effective  fault tolerance and robust exception handling mechanisms. Microservices are commonly deployed independently and errors could occur only in a separate subsystem. There are various reasons why the errors are made. The main ones include the service unavailability, because of cloud provider and network disruptions. Microservices can attempt to execute failed operation again providing a change for the success.  They can implement the backoff mechanism,  which can manage the time intervals between attempts simultaneously reducing the time of load of the system and allowing the recovery of  an unavailable system. Additionally, communication enables microservices to implement circuit breakers, which        can detect and prevent further calls to a failing service,  consequently avoiding cascading failures and improving system stability. This isolation enhances the resilience and stability of the microservices architecture.
+Communication between microservices plays a considerable role in achieving  an effective  fault tolerance and robust exception handling mechanisms. Microservices are commonly deployed independently and errors could occur only in a separate subsystem. There are various reasons why the errors are made. The main ones include the service unavailability, because of cloud provider and network disruptions. Microservices can attempt to execute failed operation again providing a change for the success.  They can implement the backoff mechanism,  which can manage the time intervals between attempts simultaneously reducing the time of load of the system and allowing the recovery of  an unavailable system. Additionally, communication enables microservices to implement circuit breakers, which  can detect and prevent further calls to a failing service,  consequently avoiding cascading failures and improving system stability. This isolation enhances the resilience and stability of the microservices architecture.
 
-\item \textbf{Exception Handling}\\
+\item [\textbf{Exception Handling}] \hfill \\
 Exception handling is a crucial aspect of any software system. It coordinates the exception handling across multiple microservices. The communication role in the exception handling in the distributed architecture is propagation the exception in- formation to other relevant services to share the awareness of an error. When an exception occurs in one microservice, it may have implications for related or de- pendent services It ensures that the exception was properly handled and prevented from being ignored or lost.
 Communication also enables to gain the the insides from the exception properly,for example by sending it to the proper subservice which is responsible for monitoring and collection of system insides. It helps to centralize logging system and monitoring tools. This       can result in  a fast system administrator and developers’ reaction, to repair the system failure.
 
-\item \textbf{Scalability}\\
+\item \textbf{Scalability}\hfill\\
 Scalability is main requirement to create modern, efficient software system. Commu- nication between microservices plays a crucial role in achieving scalable architecture.
 Communication enables the horizontal scaling by sharing the information by sub- systems about their availability and capacity  simultaneously allowing the system to adapt and distribute the processes dynamically and  efficiently.  The system can handle higher volumes of requests. Communication supports the concept of elasticity in microservices, which refers to the ability of the  system to scale up and down, automatically based on the demand. By means of communication the  system can monitor the resources usage ( such as network bandwidth, CPU and memory usage) and adjust their capacity dynamically . The dynamic scaling helps the efficient utilization of available resources and optimize resources allocation. It also  helps  to prevent bottlenecks.
 
-\item \textbf{Security}\\
-
+\item [\textbf{Security}]\hfill\\
 Security is crucial element in all the software systems. Communication plays a significant role in securing systems in microservices architecture.  Communication in microservices exposes them to the risk that send message could be intercepted and be able for thrives to infer the business logic operations. Microservices are commonly deployed in in many distributed containers so the data  so it is a potential threat to steal data from one of them. 
 However the communication process can be under various security mechanisms.
 
@@ -845,19 +844,17 @@ Currently there is a huge diversity of different technologies available on the m
    \end{description}
 \section{Technologies used in the scope of the experiments}
 \subsection{Azure Service Bus}
-Azure bus service platform-as-a-service fully managed enterprise message broker with message queues and publish-subscribe topics on the Azure Cloud. 
-Topic and queues uses the same mechanism for the producer however their process by consumer differs in significant way.
-\paragraph{Messages}  
-
-Messages are ordered in queues and timestamped with arrival time. It provides the 	First In, First Out message delivery to one or more competative customers.  Service keeps messages until they have been reported by client as accepted. Queues usually are used as a point-to-point communication, because each message can be processed only by one customer. 
+Azure bus service platform-as-a-service fully managed enterprise message broker with message queues and publish-subscribe topics on the Azure Cloud. Topic and queues uses the same mechanism for the producer however their process by consumer differs in significant way.
+\begin{description}
+\item[\textbf{Queue}] \hfill \\
+Messages are ordered in queue and timestamped with arrival time. It provides the First In, First Out (FIFO) message delivery to one or more competative customers.  Service keeps messages until they have been reported by client as accepted. Queue usually is used as a point-to-point communication, because each message can be processed only by one customer. 
 \cite{11}
+\item[\textbf{Topic}] \hfill \\
+Topic can have multiple subscribers which are listening to the topic.  It is suitable for the publish/subscribe pattern which is useful for scaling huge number of recipients. Each message is available for each client who is subscribing the topic. The message is deleted after every subscriber has processed the message.  \cite{11} .Topic can be set with multiple properties which can be used as a filtration for a client, while queues does not implement the filtration option. 
+\item[\textbf{Subscription}] \hfill \\A topic subscription is a mechanism in Azure Service Bus that allows multiple consumers to receive copies of messages sent to a specific topic. It functions as  a virtual queue, where each subscription acts as an independent recipient of messages. When a message is sent to the topic, it is automatically forwarded to all associated subscriptions.
 
-\paragraph{Topics}  
-Topic can have multiple subscribers which are listening to the topic.  It is suitable for the publish/subscribe pattern which is useful for scaling huge number of recipients. Each message is availabled for each client who is subscribing the topic. The message is deleted after every subscriber has processed the message.  \cite{11} .
-
-A topic subscription is a mechanism in Azure Service Bus that allows multiple consumers to receive copies of messages sent to a specific topic. It functions as  a virtual queue, where each subscription acts as an independent recipient of messages. When a message is sent to the topic, it is automatically forwarded to all associated subscriptions. 
-
-Topic can be set with multiple properties which can be used as a filtration for a client, while queues does not implement the filtration option. 
+\item[\textbf{Subscription}] \hfill \\
+\end{description}
 
 \subsubsection{Formats}
 The messages could be constructed in following formats:  JSON, XML, Apache Avro, Plain Text. 
@@ -866,25 +863,22 @@ The messages could be constructed in following formats:  JSON, XML, Apache Avro,
 The messages is Azure Service Bus can be send by following protocols:
 AMQP 1.0/1.1 (Advanced Message Queuing Protocol), MQTT 3.1 (MQ Telemetry Transport), OpenWire 2, 0MQ 2, STOMP 1.2, or HTTP 1.1
 
-\subsubsection{Configuration}(depth 2)
+\subsubsection{Configuration}
 Azure Service Bus provides few features allowing customize message broker. 
+\begin{description}
+\item{Dead-lettering}\\
+Subqueue which hold messages which can't be revived nor processed by any client. Can be removed then and inspected, to repair it or resubmit. 
 
-Dead-lettering 
-Subqueue which hold messages which can't be revived nor processed by any client. 
-Can be removed then and inspected, to repair it or resubmit. 
+\item{Scheduled delivery}\\
 
-Scheduled delivery
-
-Partitioning 
+\item{Partitioning}\\
 Standard queue or topic is handled by a single message broker and stored in one messaging store. However thanks to the  feature 'Partitioning',throughput of a partitioned entity is no longer limited by the performance of a single message 
  because it enables queue and topics to be partitioned across multiple message brokers.
  
 Feature partitioning is limited regarding to the tier. 
 When partitioning is enabled in the Basic or Standard SKUs, we will always create 16 partitions.
 When partitioning is enabled in the Premium SKU, the amount of partitions is specified during namespace creation.
- 
- The Test will be performed on the standard Tier. 
- 
+\end{description}
 \subsection{RabbitMQ}
 RabbitMq is message broker which accepts and forwards messages.
 The messages are send through the Advanced Message Queuing Protocol(AMQP). Advanced Message Queuing Protocol is an programmable protocol which mean that entities and routing schemes are primarily defined by applications themselves, not a broker administrator. Accordingly, provision is made for protocol operations that declare queues and exchanges, define bindings between them, subscribe to queues and so on. [ ref {https://www.rabbitmq.com/tutorials/amqp-concepts.html]
@@ -893,20 +887,19 @@ The messages published by publisher are not directly transferred to the queue, t
 
 \paragraph{Exchanges Types}
 Exchanges take message and route into zero or more queues, depending on the exchange type and bindings.
-\subparagraph{Direct exchange}
- It uses the message routing key ( which is an message attribute added to the message header) to transport messages into the queue. If the message routing key does not match any binding key, the message is discard.
-\subparagraph{Default exchange} 
+\begin{description}
+\item[\textbf{Direct exchange}] \hfill \\
+It uses the message routing key ( which is an message attribute added to the message header) to transport messages into the queue. If the message routing key does not match any binding key, the message is discard.
+\item[\textbf{Default exchange}] \hfill \\
 A default exchange is an direct exchange with no name, pre-declared by the broker.  It has one particular feature that makes it useful for simple applications: every queue created is automatically bound to it using a routing key that matches the queue name.
 For instance, if a queue is declared with the name "search-indexing-online," the AMQP 0-9-1 broker will automatically bind it to the default exchange using "search-indexing-online" as the routing key (also known as the binding key). As a result, any message published to the default exchange with the routing key "search-indexing-online" will be routed to the queue "search-indexing-online." 
-
-\subparagraph{Topic Exchange} 
+\item[\textbf{Topic exchange}] \hfill \\
 It is similar to the direct exchange however topic exchange instead of using fixed routing key, it uses wildcards. The message is routed to one or many queues, basing on a matching between a message routing key and pattern. A routing pattern of “university.*.*.technology” only match routing keys where the first word is “university" and the fourth word is “technology”.
-
-\subparagraph{Fanout Exchange}
+\item[\textbf{Fanout exchange}] \hfill \\
 Fanout xxchange routes message to all the queues bounded to it, ignoring the routing key. It is ideal for the broadcast routing of messages. The exemplary usage of this exchange is the system where the same messages should be catch by the mobile application and web application or group chats where messages are distrubibuted between participants. 
-
-\subparagraph{Header Exchange}
+\item[\textbf{Header exchange}] \hfill \\
 Header exchange uses routing on multiple attributes that are more easily expressed as message header than as a routing key. It is similar to the topic exchange however it uses the header attribute instead of routing key, which is here ignored. Specific argument termed “x-match” indicates whether all headers must match or only one. The headers can be build not only with string but also with types such as integers or hashes. 
+\end{description}
  \subsection{REST API}
 
 \chapter{Implementation}
@@ -979,7 +972,6 @@ The Rest Client API has been designed to also establish communication with exter
 RabbitMQ Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using RabbitMQ message broker over the AMQP protocol. 
 
 The application serves as consumer application, which is representation for the asynchronous communication. It does not interact with Producer API directly, but rather they communicate via an intermediary known as message broker. RabbitMQ message broker is deployed as a separate container on the local environment, using Docker image for RabbitMQ. The RabbitMQ Docker image is based on the official RabbitMQ image available on Docker Hub, and it is created using a Dockerfile. The Dockerfile defines the instructions to build the image, including the base image, environment setup, and any additional configurations needed for RabbitMQ.
-
 Once the RabbitMQ Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to pick it up.  
 
 The  RabbitMQ Client API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
@@ -991,25 +983,38 @@ following endpoints:
 \item [HTTP GET \texttt{host/api/rabbitMQConsumer/all}]
 It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
 \end{description}
-\subsection{Azure Service Bus Consumer}
-Azure Service Bus Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker over the AMQP protocol. 
+\subsection{Azure Service Bus Queue Consumer}
+Azure Service Bus Queue Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker from queues over the AMQP protocol. 
 
-Azure Service Bus Consumer API substitute of RabbitMQ Consumer API in the context of messaging systems. It implements the connection to the cloud-based message as opposed to the traditional local deployment of RabbitMQ.
-
-Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to pick it up. 
-
-Referring to the possibilities offered by Azure, a solution for collecting data from both queues and topics was implemented. 
-
+Azure Service Bus Consumer API substitute of RabbitMQ Consumer API in the context of messaging systems. It also collects data from queue, using pattern First-in-First-out however Azure Service Bus is an cloud-base message broker as opposed to the traditional local deployment of RabbitMQ. Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured queue binding.
 
 The Azure Service Bus Consumer API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
 following endpoints: 
 \begin{description}[style=nextline, font=\normalfont\textbf]
-\item [HTTP GET \texttt{host/api/rabbitMQConsumer/single}]
+\item [HTTP GET \texttt{host/api/asbConsumer/queue/single}]
+  It initializes the process of picking up single message from Azure Service Bus broker. As a response application returns single message.
+\item [HTTP GET \texttt{host/api/asbConsumer/queue/single}]
+It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
+\item [HTTP GET \texttt{host/api/asbConsumer/topic/single}]
   It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
-\item [HTTP GET \texttt{host/api/rabbitMQConsumer/all}]
+\item [HTTP GET \texttt{host/api/asbConsumer/topic/all}]
 It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
 \end{description}
 
+\subsection{Azure Service Bus Topic Consumer}
+Referring to the possibilities offered by Azure, and the lack of recommendations related to the selection of the appropriate solution by Microsoft, the process of collecting data from both queues and topics has been implemented. 
+Azure Service Bus Topic Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker from Topic over the AMQP protocol. 
+
+Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to proper topic to pick it up. For the purpose of experiment, has been implemented single subscription to a topic. 
+
+The Azure Service Bus Consumer API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
+following endpoints: 
+\begin{description}[style=nextline, font=\normalfont\textbf]
+\item [HTTP GET \texttt{host/api/asbConsumer/topic/single}]
+  It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
+\item [HTTP GET \texttt{host/api/asbConsumer/topic/all}]
+It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
+\end{description}
 \subsection{Architecture}
 
 \chapter{Experiments}
