@@ -1,0 +1,82 @@
+
+@Article{bib:article,
+  Title                    = {Title of an article in a journal},
+  Author                   = {Surname, Name and Name Surname},
+  Journal                  = {Journal Title},
+  Year                     = {2016},
+  Number                   = {8},
+  Pages                    = {1092--1113},
+  Volume                   = {157}
+}
+
+@Article{bib:article,
+  Title                    = {A survey on security issues in services communication of
+Microservices-enabled fog applications},
+  Author                   = {Dongjin Yu, Yike Jin, Yuqun Zhang, Xi Zheng},
+  Journal                  = {Wiley},
+  Year                     = {2017},
+  Number                   = {10.1002/cpe.4436},
+  Pages                    = {2-3},
+  Volume                   = {19}
+}
+
+@InProceedings{bib:conference,
+  Title                    = {Title of a conference article},
+  Author                   = {Name Surname and Surname, Name and N. Surname},
+  Booktitle                = {Conference title},
+  Year                     = {2006}, 
+  Pages                    = {5346--5349}
+}
+
+@online{bib:internet,
+  author                   = {Name Surname and Surname, Name and N. Surname},
+  title                    = {Title of a web page},
+  year                     = {2021}, 
+  url                      = {http://somewhere/on/the/internet.html},
+  urldate                  = {2021-09-30}
+}
+
+@Book{bib:book,
+  Title                    = {Microservices,IoT, and Azure},
+  Author                   = {Bob Familiar},
+  Publisher                = {Appress},
+  Year                     = {2015},
+  Address                  = {33 Spring Street, 6th Floor, New York, NY 10013},
+  ISBN                     = { 978-1-4842-1276-9}
+}
+@Book{bib:book,
+  Title                    = {Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith},
+  Author                   = { Sam Newman},
+  Publisher                = {O'Reilly Media, Inc},
+  Year                     = {2020},
+  Address                  = {1005 Gravenstein Hwy N, Sebastopol, California, 95472, United States},
+  ISBN                     = {  1492047848 }
+}
+@online{bib:internet,
+  author                   = {Sasha Mathews},
+  title                    = {4 Ways to Establish Communication between Microservices},
+  year                     = {2022}, 
+  url                      = {https://levelup.gitconnected.com/4-ways-to-establish-communication-between-microservices-984207f29497},
+  urldate                  = {Jan 25, 2022}
+}
+@Book{bib:book,
+  Title                    = {Microservice Patterns and Best Practices},
+  Author                   = {Vinicius Feitosa Pacheco},
+  Publisher                = {Packt Publishing},
+  Year                     = {2018 },
+  Address                  = {Livery Place, 35 Livery Street,Birmingham,B3 2PB, UK},
+  ISBN                     = {978-1-78847-403-0}
+}
+@online{bib:internet,
+  author                   = {Mehmet Ozkaya},
+  title                    = {Microservices Communications},
+  year                     = {2021}, 
+  url                      = {https://medium.com/design-microservices-architecture-with-patterns/microservices-communications-f319f8d76b71},
+  urldate                  = {Sep 7, 2021}
+}
+
+@online{bib:internet,
+  author                   = {Alibaba Cloud},
+  title                    = {What Is Containerization? },
+  url                      = {https://www.alibabacloud.com/knowledge/what-is-containerization},
+}

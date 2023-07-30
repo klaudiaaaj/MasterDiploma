@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "M8roSc/0JjkcrP4lJg0KwwBFY3ZON2KSSQJgraYJHy3tn1SxWp6QLm76+qHTul3AVzi8GA9cVLoWfnLVkHT5XQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\klaud\\source\\repos\\ROSSubscriber\\Master\\Publisher\\Publisher2\\Publisher2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\klaud\\.nuget\\packages\\confluent.kafka\\2.1.1\\confluent.kafka.2.1.1.nupkg.sha512",
+    "C:\\Users\\klaud\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
+    "C:\\Users\\klaud\\.nuget\\packages\\librdkafka.redist\\2.1.1\\librdkafka.redist.2.1.1.nupkg.sha512",
+    "C:\\Users\\klaud\\.nuget\\packages\\rabbitmq.client\\6.5.0\\rabbitmq.client.6.5.0.nupkg.sha512",
+    "C:\\Users\\klaud\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\klaud\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

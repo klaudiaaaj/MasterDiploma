@@ -1,0 +1,1307 @@
+﻿% !TeX spellcheck = en_GB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                        %
+%     Master thesis LaTeX template       %
+%  compliant with the SZJK regulations   %
+%                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                        %
+%  (c) Krzysztof Simiński, 2018-2023     %
+%                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                        %
+% The latest version of the templates is %
+% available at                           %
+% github.com/ksiminski/polsl-aei-theses  %
+%                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%
+% This LaTeX project formats the final thesis
+% with compliance to the SZJK regulations.
+% Please to not change formatting (fonts, margins,
+% bolds, italics, etc).
+%
+% You can compile the project in several ways.
+%
+% 1. pdfLaTeX compilation
+%
+% pdflatex main
+% bibtex   main
+% pdflatex main
+% pdflatex main
+%
+%
+% 2. XeLaTeX compilation
+%
+% Compilation with the XeLaTeX engine inserts Calibri font
+% in the title page. Of course the font has to be installed.
+%
+
+% xelatex main
+% bibtex  main
+% xelatex main
+% xelatex main
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% If you have any questions, remarks, just send me an email: %
+%            krzysztof.siminski(at)polsl.pl               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% We would like to improve the LaTeX templates
+% of final theses. By answering the questions
+% in the survey whose address your can find below
+% you help us to do so. The survey is completely
+% anonimous. Thank you!
+%
+% https://docs.google.com/forms/d/e/1FAIpQLScyllVxNKzKFHfILDfdbwC-jvT8YL0RSTFs-s27UGw9CKn-fQ/viewform?usp=sf_link
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% CUSTOMISATION OF THE THESIS                 %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Please customise your thesis with the macros below.
+
+% TODO
+%% author:
+\newcommand{\FirstNameAuthor}{Klaudia}
+\newcommand{\SurnameAuthor}{Janecka}
+\newcommand{\IdAuthor}{$\langle$student id$\rangle$}  % (remove $\langle$ and $\rangle)
+
+% coauthor:
+%\newcommand{\FirstNameCoauthor}{First Names}  % If there is a coauthor, put the first names here.
+%\newcommand{\SurnameCoauthor}{Surname}        % If there is a coauthor, put the surnames here.
+%\newcommand{\IdCoauthor}{$\langle$student id$\rangle$} % If there is a coauthor, put the student id here (remove $\langle$ and $\rangle)
+% If there is no coathor, leave the definitions empty like below. If a coauthor exists, comment the lines below.
+\newcommand{\FirstNameCoauthor}{} % If there is only one author, leave the definitions empty.
+\newcommand{\SurnameCoauthor}{}   % If there is only one author, leave the definitions empty.
+\newcommand{\IdCoauthor}{}        % If there is only one author, leave the definitions empty.
+%%%%%%%%%%
+
+\newcommand{\Supervisor}{$\langle$title first name surname$\rangle$}  % supervisor (remove $\langle$ and $\rangle)
+\newcommand{\Title}{Design and implementation of a microservice-oriented web application that collects data from external services.}
+\newcommand{\TitleAlt}{Thesis title in Polish}
+\newcommand{\Program}{Informatyka}
+\newcommand{\Specialisation}{Informatics}
+\newcommand{\Id}{$\langle$your student id$\rangle$}                   % remove \langle and \rangle in final version
+\newcommand{\Departament}{$\langle$departament name$\rangle$}         % remove \langle and \rangle in final version
+\newcommand{\Surname}{Janecka}
+\newcommand{\Firstnames}{Klaudia}
+
+% If you have a consultant for your thesis, put their name below ...
+%\newcommand{\Consultant}{$\langle$title first name surname$\rangle$}  %  (remove $\langle$ and $\rangle)
+% ... else leave the braces empty:
+\newcommand{\Consultant}{} % no consultant
+
+% end of thesis customisation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% END OF CUSTOMISATION                        %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+%   PLEASE DO NOT MODIFY THE SETTINGS BELOW!  %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\documentclass[a4paper,twoside,12pt]{book}
+\usepackage[utf8]{inputenc}                                      
+\usepackage[T1]{fontenc}  
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage[polish,british]{babel} 
+\usepackage{indentfirst}
+\usepackage{xurl}
+\usepackage{xstring}
+\usepackage{ifthen}
+\usepackage{enumitem}
+
+
+\usepackage{ifxetex}
+
+\ifxetex
+	\usepackage{fontspec}
+	\defaultfontfeatures{Mapping=tex—text} % to support TeX conventions like ``——-''
+	\usepackage{xunicode} % Unicode support for LaTeX character names (accents, European chars, etc)
+	\usepackage{xltxtra} % Extra customizations for XeLaTeX
+\else
+	\usepackage{lmodern}
+\fi
+
+
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx} 
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{subcaption}   % subfigures
+\usepackage[page]{appendix} % toc,
+
+
+
+
+\usepackage{csquotes}
+\usepackage[natbib=true,backend=bibtex,maxbibnames=99]{biblatex}  % compilation of bibliography with BibTeX
+%\usepackage[natbib=true,backend=biber,maxbibnames=99]{biblatex}  % compilation of bibliography with Biber
+\bibliography{biblio}
+
+\usepackage{ifmtarg}   % empty commands  
+
+\usepackage{setspace}
+\onehalfspacing
+
+
+\frenchspacing
+
+
+
+%%%% TODO LIST GENERATOR %%%%%%%%%
+
+\usepackage{color}
+\definecolor{brickred}      {cmyk}{0   , 0.89, 0.94, 0.28}
+
+\makeatletter \newcommand \kslistofremarks{\section*{Remarks} \@starttoc{rks}}
+  \newcommand\l@uwagas[2]
+    {\par\noindent \textbf{#2:} %\parbox{10cm}
+{#1}\par} \makeatother
+
+
+\newcommand{\ksremark}[1]{%
+{%\marginpar{\textdbend}
+{\color{brickred}{[#1]}}}%
+\addcontentsline{rks}{uwagas}{\protect{#1}}%
+}
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%% END OF TODO LIST GENERATOR %%%%%%%%%%%  
+
+\newcommand{\printCoauthor}{%		
+    \StrLen{\FirstNameCoauthor}[\FNCoALen]
+    \ifthenelse{\FNCoALen > 0}%
+    {%
+		{\large\bfseries\Coauthor\par}
+	
+		{\normalsize\bfseries \LeftId: \IdCoauthor\par}
+    }%
+    {}
+} 
+
+%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\autor}{%		
+    \StrLen{\FirstNameCoauthor}[\FNCoALenXX]
+    \ifthenelse{\FNCoALenXX > 0}%
+    {\FirstNameAuthor\ \SurnameAuthor, \FirstNameCoauthor\ \SurnameCoauthor}%
+	{\FirstNameAuthor\ \SurnameAuthor}%
+}
+%%%%%%%%%%%%%%%%%%%%%
+
+\StrLen{\FirstNameCoauthor}[\FNCoALen]
+\ifthenelse{\FNCoALen > 0}%
+{%
+\author{\FirstNameAuthor\ \SurnameAuthor, \FirstNameCoauthor\ \SurnameCoauthor}
+}%
+{%
+\author{\FirstNameAuthor\ \SurnameAuthor}
+}%
+
+%%%%%%%%%%%% FANCY HEADERS %%%%%%%%%%%%%%%
+% no capitalisation of headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO]{\nouppercase{\it\rightmark}}
+\fancyhead[RE]{\nouppercase{\it\leftmark}}
+\fancyhead[LE,RO]{\it\thepage}
+
+\setlength{\headheight}{14.49998pt}
+\addtolength{\topmargin}{-2.49998pt}
+
+\fancypagestyle{onlyPageNumbers}{%
+   \fancyhf{} 
+   \fancyhead[LE,RO]{\it\thepage}
+}
+
+\fancypagestyle{noNumbers}{%
+   \fancyhf{} 
+   \fancyhead[LE,RO]{}
+}
+
+
+\fancypagestyle{PageNumbersChapterTitles}{%
+   \fancyhf{} 
+   \fancyhead[LO]{\nouppercase{\Firstnames\ \Surname}}
+   \fancyhead[RE]{\nouppercase{\leftmark}} 
+   \fancyfoot[CE, CO]{\thepage}
+}
+ 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+\newcounter{pagesWithoutNumbers}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\newcommand{\printOpiekun}[1]{%		
+
+    \StrLen{\Consultant}[\mystringlen]
+    \ifthenelse{\mystringlen > 0}%
+    {%
+       {\large{\bfseries CONSULTANT}\par}
+       
+       {\large{\bfseries \Consultant}\par}
+    }%
+    {}
+} 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+% Please do not modify the lines below!
+\newcommand{\Author}{\FirstNameAuthor\ \MakeUppercase{\SurnameAuthor}} 
+\newcommand{\Coauthor}{\FirstNameCoauthor\ \MakeUppercase{\SurnameCoauthor}}
+\newcommand{\Type}{MASTER THESIS}
+\newcommand{\Faculty}{Faculty of Automatic Control, Electronics and Computer Science}
+\newcommand{\Polsl}{Silesian University of Technology}
+\newcommand{\Logo}{politechnika_sl_logo_bw_pion_en.pdf}
+\newcommand{\LeftId}{Student identification number}
+\newcommand{\LeftProgram}{Programme}
+\newcommand{\LeftSpecialisation}{Specialisation}
+\newcommand{\LeftSUPERVISOR}{SUPERVISOR}
+\newcommand{\LeftDEPARTMENT}{DEPARTMENT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% END OF SETTINGS                             %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% MY PACKAGES, SETTINGS ETC.                  %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Put your packages, macros, setting here.
+
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% listings
+% packages: listings or minted
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+% package listings
+\usepackage{listings}
+\lstset{%
+morekeywords={var,get,set},% add the keyword you need
+language=[Sharp]C,% C, Matlab, Python, SQL, TeX, XML, bash, ... – vide https://www.ctan.org/pkg/listings
+commentstyle=\textit,%
+identifierstyle=\textsf,%
+keywordstyle=\sffamily\bfseries, %\texttt, %
+%captionpos=b,%
+tabsize=3,%
+frame=lines,%
+numbers=left,%
+numberstyle=\tiny,%
+numbersep=5pt,%
+breaklines=true,%
+escapeinside={@*}{*@},%
+}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% package minted
+% \usepackage{minted}
+
+% This package requires a special command line option in compilation
+% pdflatex -shell-escape main.tex
+% xelatex  -shell-escape main.tex
+
+%\usepackage[chapter]{minted} % [section]
+%%\usemintedstyle{bw}   % black and white codes
+%
+%\setminted % https://ctan.org/pkg/minted
+%{
+%%fontsize=\normalsize,%\footnotesize,
+%%captionpos=b,%
+%tabsize=3,%
+%frame=lines,%
+%framesep=2mm,
+%numbers=left,%
+%numbersep=5pt,%
+%breaklines=true,%
+%escapeinside=@@,%
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% END OF MY PACKAGES, SETTINGS ETC.           %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+%\kslistofremarks
+
+\frontmatter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+%    PLEASE DO NOT MODIFY THE TITLE PAGE!     %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%  TITLE PAGE %%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}
+{
+	\newgeometry{top=1.5cm,%
+	             bottom=2.5cm,%
+	             left=3cm,
+	             right=2.5cm}
+ 
+	\ifxetex 
+	  \begingroup
+	  \setsansfont{Calibri}
+	   
+	\fi 
+	 \sffamily
+	\begin{center}
+	\includegraphics[width=50mm]{\Logo}
+	 
+	
+	{\Large\bfseries\Type\par}
+	
+	\vfill  \vfill  
+			 
+	{\large\Title\par}
+	
+	\vfill  
+		
+	{\large\bfseries\Author\par}
+	
+	{\normalsize\bfseries \LeftId: \IdAuthor}
+
+	\printCoauthor
+	
+	\vfill  		
+ 
+	{\large{\bfseries \LeftProgram:} \Program\par} 
+	
+	{\large{\bfseries \LeftSpecialisation:} \Specialisation\par} 
+	 		
+	\vfill  \vfill 	\vfill 	\vfill 	\vfill 	\vfill 	\vfill  
+	 
+	{\large{\bfseries \LeftSUPERVISOR}\par}
+	
+	{\large{\bfseries \Supervisor}\par}
+				
+	{\large{\bfseries \LeftDEPARTMENT\ \Departament} \par}
+		
+	{\large{\bfseries \Faculty}\par}
+		
+	\vfill  \vfill  
+
+    	
+    \printOpiekun{\Consultant}
+    
+	\vfill  \vfill  
+		
+    {\large\bfseries  Gliwice \the\year}
+
+   \end{center}	
+       \ifxetex 
+       	  \endgroup
+       \fi
+	\restoregeometry
+}
+  
+
+
+\cleardoublepage
+
+\rmfamily\normalfont
+\pagestyle{empty}
+
+
+%%% Let's start the thesis %%%%
+
+% TODO
+\subsubsection*{Thesis title}  
+\Title
+
+\subsubsection*{Abstract} 
+(Thesis abstract – to be copied into an appropriate field during an electronic submission – in English.)
+The investigations covered in this papers are related to the Microservices architecture. The main aim is to investigate the communication aspects within microservices architecture and their impact on the system performance, scalability and it's overall efficiency.
+The knowledge about the inter-services communication is crucial to build robust distributed systems. 
+The study delves into various communication patterns and technologies commonly used in the microservices architecture, providing insights about its limitations, advantages and impact on the whole system behaviour. 
+ 
+\subsubsection*{Key words}  
+
+
+\subsubsection*{Tytuł pracy}
+\begin{otherlanguage}{polish}
+\TitleAlt
+\end{otherlanguage}
+
+\subsubsection*{Streszczenie} 
+\begin{otherlanguage}{polish}
+(Streszczenie pracy – odpowiednie pole w systemie APD powinno zawierać kopię tego streszczenia.)
+\end{otherlanguage}
+
+\subsubsection*{Słowa kluczowe} 
+\begin{otherlanguage}{polish}
+
+\end{otherlanguage}
+
+
+
+
+%%%%%%%%%%%%%%%%%% Table of contents %%%%%%%%%%%%%%%%%%%%%%
+% Add \thispagestyle{empty} to the toc file (main.toc), because \pagestyle{empty} doesn't work if the TOC has multiple pages
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{pagesWithoutNumbers}{\value{page}}
+\mainmatter
+\pagestyle{empty}
+
+\cleardoublepage
+
+\pagestyle{PageNumbersChapterTitles}
+
+%%%%%%%%%%%%%% body of the thesis %%%%%%%%%%%%%%%%%
+
+% TODO
+\chapter{Introduction}
+The following chapter will cover the introduction to the problem domain. It will define the scope of work, present a brief description of the developed system, and outline the conducted research.
+
+\section{Introduction to the problem domain}
+Nowadays, IT solutions are commonly the core of maintenance and organization of many products and companies. The system for any enterprise with a notable size is  very complex and composed of a  few independent solutions. The growth of the system commonly relates to the new system functionalities, connection to resources provided by new business partners or new technological solutions, such as cloud services, which have recently been a trend in software development. Due to the connection between them, such as infrastructure is for example the so called "Spaghetti architecture" The  [figure 1.1]  illustrates the inefficient, lack of orderless and hard to manage side of IT solution.
+
+ \begin{figure}
+\centering
+  \includegraphics[width=0.5\textwidth]{spaghetti.jpg}
+\caption{Spaghetti architecture diagram}
+\label{fig1}
+\end{figure}
+
+Referring to this problem, many architectural patterns have been created over the years. Microservices are an example of an approach of software architecture which addresses many modern            application challenges. Microservices offer several advantages including scalability and flexibility in managing complex applications. The most important point of designing microservices architecture is a good selection of technology and a method of communication between individual subsystems. The choice of the pattern is sophisticated, because it requires cross-sectional knowledge of a wide range of technologies available on the market. The technology should meet the requirements of the individual system and simultaneously is supposed to  be optimal     in relation to the costs.
+
+\section{Contribution and objective of the thesis}
+The main purpose of the thesis is to provide the solution to the choice of a proper type of communication in the process of creating a  (complex distributed system in microservices architecture.
+The goals of the thesis are as follows:
+\begin{itemize}
+\item Studying  existing communication technologies, 
+\item Identifying the challenges of collaboration between microservices,
+\item Performing and experimenting by using the chosen types of communication and various data packages,
+\item Recognizing the configuration properties required to establish  the best performance com munication between microservices by means of using selected technology,
+\item Studying the best usability of the a  given technology depending on the demand of the system,
+\item Examining the cost and difficulties in implementing chosen technology pattern;
+\end{itemize}
+For the purpose of conducting a  research for the  master’s thesis, a system based on the microservices architecture was developed, along with the creation of datasets.
+The system is composed of multiple applications. It creates the space to perform experiments with multiple communication patterns. There is one publisher application which sends the data to multiple separate client’s applications. Each application stands for the representation of each communication pattern.
+Datasets were designed in various forms to perform experiments for a few different purposes of communication between subsystems. Over the study, metrics have been collected at multiple stages [tutaj moze wiecej dopisze jak skoncze badania].
+The study ends with a simulation emulating the real-word scenario of data transmission. The data is sent to the robotics simulator  that simulates  environment simultaneously  impacting the data transmission to the robot. This action triggers the robot’s motion. It becomes possible to gain the insides about how the type of communication influences  the trajectory and  at the same time evaluate the  efficiency  of the robot’s motion. The findings of this study have the potential to contribute to the development of more efficient and optimized communication strategies within microservices-based applications.
+
+\section{Overview of the literature}
+The research methodology of this thesis was to conduct a comprehensive literature review. The terms like microservice, microservices, micro service, micro services, micro-service, and micro-services were studied  in detail and analysed in  the articles published in journals, conferences, books, and workshops. The research was restricted to the articles published between 2015 and 2023. The  information about the communication types and data serialization techniques was  collected from various sources such    as official documents, scientific thesis, blogs and video conferences. The collaboration between microservices is currently under the constant development and research. New technology solutions such as cloud enables to increase the performance and efficiency of the communication. After the completion of literature review, it is confirmed that this topic  poses a  very common problem nowadays   and the choice of an appropriate connection type and its configuration when designing web applications becomes quite a big challenge. Most of literatures provide a brief comparison between  the two chosen  technologies. However  these  kinds  of research were also very helpful. They allow analysing a specific use case of the  chosen patterns. 
+The  following articles which were found  during the investigation. are the closest to the topic of  master’s thesis.
+
+ “Performance Evaluation of RESTful Web Services and AMQP Protocol” is an article by Joel L. Fernandes, Ivo C. Lopes, Joel J. P. C. Rodrigues, and Sana Ullah. Authors provided the survey of performance in REST API in competition to Advanced Message Queuing Protocol in mobile development environment.\\
+In the article, the authors present a description of these technologies, with a focus on the introduction of asynchronous communication as a promising solution to data transfer using massive quantities of data. For performance studies RabbitMQ supporting the AMPQ Protocol is taken into consideration. To provide a result, the authors conduct multiple experiments in created Java back-end system using large amounts of data.\\In the first experiment, the authors focused on examining the interaction between a user application and RabbitMQ, a message broker, using the AMQP protocol. Throughout a thirty minute experiment, the user application continuously sent messages to RabbitMQ. However, a notable aspect of this experiment was the absence of any active consumer (back-end service) connected to RabbitMQ during the message transmission. This design allowed the authors to observe RabbitMQ's behavior when handling incoming messages without immediate recipients.\\Moving on to the second experiment, the user application's objective was to send messages to a Web service server for a continuous period of 30 minutes, utilizing the HTTP protocol for communication. Subsequently, the Web service, upon receiving these messages, established communication with a database using the Java Database Connectivity driver to store the incoming messages. Through this setup, the authors sought to evaluate the end-to-end message flow, analyzing the efficiency and reliability of the communication and data storage process between the user application, Web service, and the database.\\In the third experiment, the user application once again sent messages to RabbitMQ using the AMQP protocol, as described in the first experiment. However, this time, the authors introduced an active consumer (back-end service) connected tRabbitMQ. The consumer's role involved reading the incoming messages from RabbitMQ, processing them, and using the Java Database Connectivity driver driver to connect to the database and store the processed messages. This experimental configuration allowed the authors to assess the overall performance and effectiveness of the message processing pipeline, particularly in a real-time scenario with an active consumer.\\The authors found out  that the application which is  supposed to exchange an large amount of data should use RabbitMQ. They confirmed that RabbitMq  sent the larger number of messages per second and consumed less mobile device resources
+
+„Event-based Customisation of MultiTenant SaaS Using Microservices” is thesis by Espen Tønnessen Nordli. In this thesis the author analyses the multitenant system in microservices architecture which is based on the events. A significant key is that one instance called tenant manager serves multiple  tenants . It gains more  economical benefits than by  creating tenant manager instance for each customer’s  application. The use of microservices is significant to solve the problem because it helps in keeping all the  modules independent, consequently allowing tenants to choose  their own technology stack and in continous-delivery to perform some customization quicky   without  affecting other tenant ‘s system. It is a perfect solution  to  a  tenant customization to meet  a single customer’s  needs and a feature requested by one organisation without  affecting  any of the other organization. The system presented in the paper focuses on the tenant-islotation and the reduced numer of application programming interface (API) calls.\\Microservices are communicating with each other using RabbitMq and Azure Service Bus with isolated topics for each tenant. Author provides complex analysys of benefits of each event bus, putting focus on the security and the ease of setting up the environment.
+
+\section{Delimitations}
+Tutaj dopisze co mogłoby być jeszcze przetersowane, co nie udało mi się przetestować 
+\section{Short summary of chapters}
+
+TODO IN THE LATE STATE
+
+
+\chapter{Overview of terminology and technology evolution}
+
+This chapter covers the brief description of software architectures and patterns strictly related with the problem domain. It includes a comparison of  base architectures in relation to the microservices. This chapter also provides an comprehensive analysis of the evolution of Microservices architecture. It presents its origins, emphasizing the core motivation aspects leading to its creation. In this chapter the history context will be examined. It is worth mentioning that  the industrial software needs  resulted in  the development of the technology that shaped the emergence of Microservices architecture as a prominent model in software engineering for complex systems.
+
+\section{Architecture patterns}
+\subsection{Monolith}
+
+To analyse the Microservices it is worth mentioning the Monolith architecture, which is  a traditional model of the software program. Monolith is built  as a single unit, all the code is deployed as an single unit. It is self-contained and independent from other applications. It can be composed of a single module or multiple modules inside a single process. Under one monolith application multiple developers teams could be working,  on different segments of the application. The disadvantage of monolith is the difficulty in making changes. Due to this inconvenience multiple problems with blocking each other by waiting for a change of the same piece of the code could occur. Any change, even a small one, involves updating the entire stack and deploying the updated version, which is very time consuming when the system is enormous.
+The communication between modules in the Monolith architecture is performed using a local method invocation. The intermodule communication could be a problematic solution. This pattern is direct and synchronous, so if the called module is not available within the system , the caller module will be impacted. The system could be blocked for the indefinite time or has to wait till the system returns the time-out errors, leading to report of the system issue. It becomes particularly significant for example when the calling and called methods are responsible for generating and managing data respectively. If the function responsible for data analysis encounters parsing error, also the subsystem responsible for generating data would stop. This underscores the critical importance of establishing a robust error handling mechanism and ensuring that all business logic relies on a system capable of perfect handling errors and appropriately responding to failures.\\
+However monolith has also some advantages:
+\begin{itemize}
+\item All the code located in one place is easier to debug,
+\item One executable file is easier to deploy than multiple files from multiple subsystems, 
+\item End-to-end testing can be performed faster than in the distributed systems;
+\end{itemize}
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\textwidth]{monolith.png}
+\caption{Monolith diagram}
+\label{fig1}
+\end{figure}
+ 
+\subsection{Service-oriented architecture}
+The heavyweight nature of monolith architecture has slowly been decomposed decomposed into modules. This process has led to the formation of a new architecture known as service-oriented architecture (SOA).
+Modules communicate using the Enterprise Service Bus. Software-Oriented architecture manages and coordinates the services delivered through this layer. For the whole system Enterprise Service Bus is single point of failure and if any damage or delay occur the system the entire system could be affected and overwhelmed. Modules communicate using the Enterprise Service Bus. Software-Oriented architecture manages and coordinates the services delivered through this layer. 
+Modules perform  various type of operations and transactions. There is no strict division into individual role for a particular module. The whole system uses a single dedicated database engine. The application under consideration is comprised of four different types of services:
+
+\begin{description}
+\item \textbf{Functional services}\\
+The services which are responsible for the businesses operations for the application. It encapsulates the business logic and provides functionality that can  be accessed by other components within the system.
+\item \textbf{Enterprise services}\\
+The services which implement the functionality required by the system. It integrates multiple functional services to deliver end-to-end functionality. The service which performs coordination of various business processes across different subsystems or applications, could be given as an example of enterprise service.
+\item \textbf{Application services}\\
+The services which are responsible for development and deployment. They provide the set of tools such as development frameworks, application deployment platforms, and runtime environments which could be used to perform build, deploy and manage the application within  the environment.
+\item \textbf{Infrastructure services}\\
+The services which are related to the underlying technical infrastructure of a system.  These services could be responsible for the authentication, security or data management. They could also handle the communication protocols.  	
+\end{description}
+The service-oriented architecture is a precursor of Microservices architecture. How ever these architectures are neither comparable and nor compatible. There are a few significant discrepancies  between them. The Service-oriented architecture differs in the scope. In Service-oriented architecture modules are shared and reused enterprise-wide. For example the scope of the application may include the entire department in the company or  a complex subsystem, which could subsequently consist of full user’s  authorization  and the business logic (e.g. administrator module for user’s management).
+
+\begin{figure}[!]
+\centering
+  \includegraphics[width=0.6\textwidth]{soa.png}
+\caption{Service-oriented architecture diagram}
+\label{fig1}
+\end{figure}
+ 
+\subsection{Microservices}
+Service-oriented architecture was a precursor  to  microservices, laying the foundations  for the development of the  ideas related to the modularization of services and applications. Microservices, although inspired by SOA architecture, have extended the concept of modularity. Microservices not only applications in order to optimize the amount of functions and data, but also segregate operations in terms of business logic basing on the Domain Driven Design. Each microservice  has both, a  single responsibility for the system and a  separate database engine. Microservices are discussed in more detail in the next chapers.
+ 
+ \begin{figure}[h]
+\centering
+  \includegraphics[width=0.6\textwidth]{microservices.png}
+\caption{Microservices diagram}
+\label{fig1}
+\end{figure}
+\subsubsection{Domain Driven Design}
+Domain driven Design is an approach to the software development which concentrates on modelling software architecture to match a domain. The structure of application including the name convention of a classes, method and variables, should match the business domain.
+
+
+\chapter{Microservices}
+The term ’Microservice’ defines the small application which has a single responsibility to the whole system. It has only one reason for changing or being replaced.
+Adrian Cockcroft, a famous technologist and strategist, defines a microservices architecture as a service-oriented architecture consisting of loosely coupled components that operate within well-defined boundaries. Loosely coupled means that services can be updated independently, without requiring changes to other services. If you have a collection of small, specialised services that still need to be updated simultaneously, they cannot be considered as microservices. There is a lack of loose coupling principle between them.
+
+The idea of the microservices is related to the demand of scaling along different axes independently. This is a big trend in modern software architecture so studying  it in the  perspective of communication and data flow is extremely important and even indispensable.
+
+\section{Evolution of software architecture}
+
+The history of microservices can be traced back to the 1990s, when the first ideas and concepts of distributed software architecture emerged. However, the term ’microservices’ has only become popular in the last decade, and their development was linked to advances in technology and changes in approaches to application development.
+
+An Early work on microservices focused on finding better ways to create service-based software. One important step was the introduction of Service-Oriented Architecture (SOA) as an approach to creating modular and loosely coupled services. Service-Oriented Architecture has made it possible to create applications consisting of independent components that can be easily scaled and developed.
+In 2011, the term ’microservices’ was introduced by Martin Fowler and James Lewis in their article ’Microservices: a definition of this new architectural term’.
+ 
+\subsection{Netflix as a microservices pioneer}
+Netflix, Inc.  played an important role in developing and promoting microservices architecture. Netflix, Inc. was one of the pioneers in using microservices as the main approach to building its streaming platform.
+Netflix, Inc. started out as a small rental company. It offered an online DVD subscriptions through the Internet. Movies were mailed to the customers in the form of DVD’s with prepaid return envelopes. Nowadays Netflix, Inc. is huge streaming platform whose content is produced in houses (Netflix Originals) or produced by other companies which Netflix  has distribution right to.\\ With the huge shift in product delivery from postal services to online services, Netflix, Inc. needed more and more resources on the Internet and powerful software, due to the increasing demand. Consequently, the company made a decision to move its IT infrastructure from private data centres to a public cloud and replace its monolithic architecture with a microservices architecture. However, at that time, the term "microservices" was not widely known, and the structure itself was not well-established.\\
+Netflix, Inc. emerged as one of the first prominent companies to successfully introduce the transition from  a monolith to a cloud-based microservices architecture. This achievement was recognized in 2015 when it received the JAX Special Jury award. Nowadays , Netflix, Inc. manages and supports  various parts of its platform through over a thousand microservices.
+
+\section{Benefits and Challenges of Microservices}
+
+Microservices architecture is a great architectural pattern. However,  it is more complex than legacy systems so it comes with some challenges. As the number of subservices grows so does the complexity of managing and maintaining the data consistency.\\
+The first problem is encountered at the beginning of creating system. Software architect has to find appropriate boundaries of the subsystem. The whole business requirements have to be broken down into specific domains and the microservices that are sized adequately are supposed to be created. Unfortunately the whole process is extremely difficult to achieve.
+In the following architecture, there is also difficulty  in testing the whole system. In addition to testing individual services independently, the service integration and interdependencies should also be considered during creating a end-to-end test plan.
+Microservices standards allow subsystems to make subsystems using different technologies. It can cause many problems, starting from integrating microservices to use the same libraries for common operations and  finishing with transition to the maintenance mode. The advantages acquired from technical diversity may quickly get outweighed by increased maintenance costs,  generated by the necessity to arrange a  maintenance team, composed of developers who are knowledgeable about whole the technology stack. They have to be aware of the entire stack in order not to make  any breaking change in the functionality that other services depend on.
+
+However, most of the challenges related to the microservices are around the necessity to share the business data and information between subsystems. All of that ought to be solved  with a good communication implementation, which will be discussed in the next chapter.
+
+\section{Cloud and contenerization}
+At the beginning  of  this section, one can find   brief descriptions of concepts followed by detailed analysis  further in the section subject.
+\subsection{Containerization }
+Containerization is a form of visualization, which operates on the application level. It enables the creation of multiple independent instances within a single kernel. These instances are known as containers, which serve as self-contained units that pack an application’s code, runtime, system tools, libraries, and configurations into a single entity. Containers visualize CPU, memory, storage, and network resources at the operating system level, creating a segregated environment where developers can interact with the OS independently from other applications and environments. Containers share a common kernel, which is installed on the underlying hardware.
+
+A container images serve a fundamental building block. It is a file that contains all the necessary components to run an application within a container. The image includes the application’s code, dependencies, libraries, system tools, and configurations. Images construction ,and creation is based on the configuration files, where there are specified steps required to build an image in the container instance.\\
+Docker, being the most widely adopted open-source container format.
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.7\textwidth]{container.png}
+\caption{Container vs Casual}
+\label{fig1}
+\end{figure}
+\subsubsection{Docker}
+Docker is a commonly used contenerization platform. It provides an additional layer of abstraction and automation for the container management. It simplifies the process of creating, deploying, and running applications within containers. Docker offers the ‘docker compose’ tool helping  to configure and run applications made up of multiple containers. For the docker users it provides an ecosystem of pre-build container images available through the internet on the Docker Hub website. It provides developers with the convenient way of reuse the existing solutions again.
+
+\subsection{Orchestration}
+The process of managing and arranging containers to support applications is known as a container orchestration. It is fully managed by container orchestration tools. These tools provide the necessary mechanisms to deploy, scale, manage, and monitor containerized applications. These tools help automate tasks such as container deployment, load balancing, service discovery, scaling, and fault tolerance, making it easier to manage complex containerized environments efficiently. Some widely used open-source container orchestration tools include Kubernetes, Docker Swarm, and LXC.
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.7\textwidth]{orche.png}
+\caption{Container orchestrator}
+\label{fig1}
+\end{figure}
+\subsubsection{Kubernetess}
+Kubernetes(known as K8S) is an open-source platform designed to automate the deployment, scaling, and management of containerized applications Kubernetess organizes containers that form an application into cohesive units, providing the easy way to manage complex system. \\Kubernetes is based on a  Google’s  fifteen year  extensive experience  in running  production workloads having  incorporated valuable insights and industry best practices gathered from the community.
+\subsection{Continuous delivery}
+Continuous Delivery is a software concept that enables the demand deployment of a software to any native environment. It enhances the delivery of software life circle to be automated. It leverages techniques like Continuous Integration and Continuous Deployment. 
+\subsection{Microservices in Cloud computing}
+In recent years cloud computing gained the interest and trust of many researches and industries. This is a growing paradigm which had a big impact on the microsevices implementation. Currently on the market there are many cloud services providers such as Microsoft Azure, Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, and Kamatera. The usage of containers in the cloud makes Microservices development and deployment more agile. Microservices are abstracted,  which means that they can be run on any operating system located in the public cloud, on premises or in the virtual hypervisor. They can be also migrated back from a cloud to the on-premises and back. Containers are a perfect solution for the deployment of microservices. They can be launched in a second, so redeployment of any failure or migration can be done rapidly. It helps to scale quickly to meet current demands. The entire microservice application can be deployed as a cluster using a orchestrator.
+
+In the security aspect, using the same host kernel for different containers makes it more possible for attackers to gain  an unauthorized access to containers. The containers which rely on the underlying operating system’s kernel provide the resources isolation. If an attacker manages to exploit the vulnerability in the shared kernel, they may gain an unauthorized access to the host system and potentially compromise all containers running on that host. It is called the "container escape". Container technologies like Docker and Kubernetes have implemented security measures to mitigate these risks. 
+
+In the software development aspect, cloud providers offer  various of functionalities that can significantly help and optimize the programming processes. They offer the integration services such as Azure Logic Apps which allow to integrate various applications and services. This enables data synchronization between applications, event monitoring, and automated responses to changes.
+
+They offer the cloud databases like Amazon RDS, Azure Cosmos DB, or Google Cloud Firestore  which are flexible and scalable data storage solutions. These solutions offer advanced replication, data backup, and compliance management features.
+
+Cloud networking services empower researchers to build sophisticated, distributed application architectures. Services such as AWS Virtual Private Cloud (VPC), Azure Virtual Network, or Google Cloud Virtual Private Cloud (VPC) allow developers to create isolated networks, manage network traffic, implement advanced security measures, and establish secure connections between different application components.
+
+Cloud AI services deliver advanced tools for data analysis, image recognition, natural language processing, and other AI applications. Examples include Azure Cognitive Services, Google Cloud AI Platform, or AWS AI/ML Services. Researchers can leverage pre-trained AI models and algorithms to enrich their applications with intelligent capabilities such as facial recognition, language translation, and sentiment analysis. 
+
+Cloud monitoring and analytics services enable data collection, processing, and analysis of telemetry from various application components. Services like AWS CloudWatch, Azure Monitor, or Google Cloud Monitoring allow developers to track application performance, identify issues, and optimize its operation.
+
+Cloud providers also offer  the services which are responsible for the message and event communication between subsystems. One of  them  is Azure Service bus which will be discussed  and used in the communication survey in  the next chapters.
+
+\chapter{Communication}
+This chapter will focus on analysis of a problem related to the performed experiments. The conducted research is aimed at demonstrating the effectiveness of a given technology in general terms and the functioning of the entire system.
+
+\section { The role of communication between microservices in the overall perception of a system}
+The communication between particular subsystems plays a significant role in functionality of  the entire  system. The communication is used for the following aims: 
+\begin{description}
+\item \textbf{Checks system coherence }\\
+Maintaining  the distributed system could be challenging because each subsystem can be written  in a  different time, by various developers and applied by various programming languages. The subsystems exchanges information and validates data again according to the previously predefined rules, to ensure that all the subservices operate within the specified constraints. The validation process checks the consistency of the data and cross-services dependencies and correlations  which guarantees the system coherence.
+Database translations integrity
+Maintaining the data consistency can be also a challenger to the distributed system. From the definition of microservices, each microservice should have separate instance of database. Even if each of the systems, performs a different operation, it could operate on the same set of data. In this situation if the data is modified by one system, the modifying system should notify other systems to update  their  databases  considering  a  conducted changes.
+
+\item \textbf{Collaboration of tasks synchronization}\\
+Referring to the genesis of microservices architecture, the system is composed of  particular services where each subsystem is responsible for a  single functionality. The whole system collaborates to fulfil the business processes that span across different domains. Communication between them enables the opportunity to work together seamlessly to deliver complex business functionalities. Very often there is a necessity to exchange data in order to perform respective tasks. Communication between microservices plays a significant role in facilitating task synchronization by enabling the exchange of control signals, status updates, and coordination messages among the involved subservices.  Microservices can share the status of updates and progress information during the task execution, enabling other subservices to take appropriate action based on the status. It enables to have real-time transparency, allowing better monitoring and decision-making.
+
+\item \textbf{Database translations integrity}\\
+Maintaining the data consistency can be also a challenger to the distributed system. From the definition of microservices, each microservice should have separate instance of database. Even if each of the systems, performs a different operation, it could operate on the same set of data. In this situation if the data is modified by one system, the modifying system should notify other systems to update  their  databases  considering  a  conducted changes.
+\item \textbf{Fault tolerance}\\
+Communication between microservices plays a considerable role in achieving  an effective  fault tolerance and robust exception handling mechanisms. Microservices are commonly deployed independently and errors could occur only in a separate subsystem. There are various reasons why the errors are made. The main ones include the service unavailability, because of cloud provider and network disruptions. Microservices can attempt to execute failed operation again providing a change for the success.  They can implement the backoff mechanism,  which can manage the time intervals between attempts simultaneously reducing the time of load of the system and allowing the recovery of  an unavailable system. Additionally, communication enables microservices to implement circuit breakers, which        can detect and prevent further calls to a failing service,  consequently avoiding cascading failures and improving system stability. This isolation enhances the resilience and stability of the microservices architecture.
+
+\item \textbf{Exception Handling}\\
+Exception handling is a crucial aspect of any software system. It coordinates the exception handling across multiple microservices. The communication role in the exception handling in the distributed architecture is propagation the exception in- formation to other relevant services to share the awareness of an error. When an exception occurs in one microservice, it may have implications for related or de- pendent services It ensures that the exception was properly handled and prevented from being ignored or lost.
+Communication also enables to gain the the insides from the exception properly,for example by sending it to the proper subservice which is responsible for monitoring and collection of system insides. It helps to centralize logging system and monitoring tools. This       can result in  a fast system administrator and developers’ reaction, to repair the system failure.
+
+\item \textbf{Scalability}\\
+Scalability is main requirement to create modern, efficient software system. Commu- nication between microservices plays a crucial role in achieving scalable architecture.
+Communication enables the horizontal scaling by sharing the information by sub- systems about their availability and capacity  simultaneously allowing the system to adapt and distribute the processes dynamically and  efficiently.  The system can handle higher volumes of requests. Communication supports the concept of elasticity in microservices, which refers to the ability of the  system to scale up and down, automatically based on the demand. By means of communication the  system can monitor the resources usage ( such as network bandwidth, CPU and memory usage) and adjust their capacity dynamically . The dynamic scaling helps the efficient utilization of available resources and optimize resources allocation. It also  helps  to prevent bottlenecks.
+
+\item \textbf{Security}\\
+
+Security is crucial element in all the software systems. Communication plays a significant role in securing systems in microservices architecture.  Communication in microservices exposes them to the risk that send message could be intercepted and be able for thrives to infer the business logic operations. Microservices are commonly deployed in in many distributed containers so the data  so it is a potential threat to steal data from one of them. 
+However the communication process can be under various security mechanisms.
+
+Implementing the security on communication system can prevent the exposing the malicious process when one of subsystems is attacked.
+Gegick and Barnum 73 proposed that only the minimum necessary rights should be assigned to a
+subject that requests access to a resource and should be in effect for the shortest duration necessary ( reference to :" A survey on security issues in services communication of Microservices-enabled fog applications"). 
+Communication enforces the secure of communication protocols using a network-level security . Microservices can communicate over the secure channels which uses the encryption protocols ( for example: Transport Layer Security (TLS) and Secure Sockets Layer (SSL)).\\
+The encryption makes the communication secure the 	sensitive data from eavesdropping, tampering, or interception. 
+\\
+To protect data during the communication, there could be implemented the data encryption,  that utilizes shared key and public key encryption. The data can be encrypted by for example Advanced Encryption Standard (AES) as hared key encryption and RSA encryption algorithm as public key encryption scheme.\\
+There is possibility to implement the Authorization and Authentication  through the communication. Microservices can exchange authentication tokens or credentials to verify the identity of the communicating subsystems. \\
+Thanks to the authorization process, there can be implemented additional role management. Role-based access control (RBAC) or attribute-based access control (ABAC) can limits the right to perform specific action only for selected system users. 
+\end{description}
+
+\section{Communication Patterns }
+In microservices architecture there are a few available communication patterns. The system architect is responsible for analysing the advantages and disadvantages of each pattern. This evaluation process is crucial in order to make an informed decision and choose the most suitable communication pattern for the specific scenario of the system. Thanks to considering the pros and cons of each pattern, the architect can ensure effective and efficient communication between the services in the system. Ultimately, the chosen communication pattern will play a considerable role in determining the overall performance and functionality of the application.
+
+\subsection{Synchronous}
+Synchronous communication refers to a communication pattern where services interact by exchanging messages and wait for a timely response before proceeding further. In this approach, a service initiates a request to another service and waits for the response, blocking its execution until a reply is received. However it is possible to asynchronous interactions using synchronous technologies. Client services instead of waiting for the request to be completed, can implement the pattern like pooling in separate thread to check the service for completion in some period of time. The examples of synchronous communication protocols are as follows:
+\begin{itemize}
+  \item Hypertext Transfer Protocol (HTTP)
+  \item Transmission Control Protocol (TCP)
+  \item Remote Procedure Call (RPC)
+  \item Simple Object Access Protocol (SOAP)
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.7\textwidth]{communication.png}
+\caption{Synchronous communication diagram}
+\label{fig1}
+\end{figure}
+
+\subsection{Asynchronous}
+Asynchronous communication refers to a communication pattern where services interact without requiring immediate and direct response. In this approach, a service sends a message or request to another service and continues its execution without waiting for a response. The receiving service processes the message independently and may respond at a later time or not at all. \\
+
+The asynchronous communication usually is  carried out  by implementing the message broker. Below there is a description of used terms in following communication patterns:
+\begin{description}
+\item \textbf{Message Broker}\\
+Message broker is a piece of  the software which facilitates a data queue that connects the Producer and Consumer services.  
+\item \textbf{Producer}\\
+Application which is  responsible for sending or even also generating messages. It sends data directly to the message broker. In publish-subscribe pattern they are called publishers.  
+\item \textbf{Consumer}\\
+Application which consumes the data from the message broker.. In the  published/subscribed pattern they are called subscribers
+\item \textbf{Message}\\
+Message is the objects sent by producer to message broker. Message is composed by a header ( the metadata used for the message indication or security information ) and body. 
+\item \textbf{Queue/topic}\\
+A directory where messages are stored.
+\end{description}
+The message could be consumed from the message broker by single or multiple Consumers. If a consumer wants to send  a response after processing  the data, it can sent  the message back to the message broker which will be subsequently caught by publisher system. \\
+The most popular protocols for the Asynchronous Communication are
+   \begin{itemize}
+  \item Message Queuing Telemetry Transport (MQTT)
+  \item Advanced Message Queuing Protocol (AMQP)
+  \item Apache Kafka
+  \item Java Message Service (JMS)
+  \item WebSockets
+\end{itemize}
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.7\textwidth]{communication.png}
+\caption{Asynchronous communication diagram}
+\label{fig1}
+\end{figure}
+\section {Available technologies}
+Currently there is a huge diversity of different technologies available on the market   which are responsible for the connection of multiple subsystems. All of the commonly used technologies are based on the communication using the protocols listed above.
+\subsubsection{Synchronous}
+\begin{description}
+  \item Hypertext Transfer Protocol (HTTP)
+  \begin{itemize}
+    \item RESTful 
+     \item GraphQL 
+         \item Azure Service Bus
+      \end{itemize}
+  \item Transmission Control Protocol (TCP)
+   \begin{itemize}
+    \item RMI  
+     \item gRPC 
+      \end{itemize}
+  \item Remote Procedure Call (RPC)
+   \begin{itemize}
+    \item gRPC 
+      \end{itemize}
+  \item Simple Object Access Protocol (SOAP)
+   \begin{itemize}
+    \item Apache CXF 
+     \item WCF  
+      \end{itemize}
+\end{description}
+\subsubsection{Asynchronous}
+   \begin{description}
+    \item Message Queuing Telemetry Transport (MQTT)
+     \begin{itemize}
+    \item Eclipse Paho
+      \end{itemize}
+  \item Advanced Message Queuing Protocol (AMQP)
+       \begin{itemize}
+    \item RabbitMQ
+    \item Azure Service Bus
+      \end{itemize}
+      
+  \item Apache Kafka
+       \begin{itemize}
+    \item Kafka Streams
+     \item Confluent Platform
+      \end{itemize}
+  \item Java Message Service (JMS)
+       \begin{itemize}
+    \item Apache ActiveMQ
+     \item Apache IBM MQ
+      \end{itemize}
+  	\item WebSockets  
+       \begin{itemize}
+    \item Socket.IO
+      \item SignalR
+        \item Azure Service Bus
+      \end{itemize}
+   
+   \end{description}
+\section{Technologies used in the scope of the experiments}
+\subsection{Azure Service Bus}
+Azure bus service platform-as-a-service fully managed enterprise message broker with message queues and publish-subscribe topics on the Azure Cloud. 
+Topic and queues uses the same mechanism for the producer however their process by consumer differs in significant way.
+\paragraph{Messages}  
+
+Messages are ordered in queues and timestamped with arrival time. It provides the 	First In, First Out message delivery to one or more competative customers.  Service keeps messages until they have been reported by client as accepted. Queues usually are used as a point-to-point communication, because each message can be processed only by one customer. 
+\cite{11}
+
+\paragraph{Topics}  
+Topic can have multiple subscribers which are listening to the topic.  It is suitable for the publish/subscribe pattern which is useful for scaling huge number of recipients. Each message is availabled for each client who is subscribing the topic. The message is deleted after every subscriber has processed the message.  \cite{11} .
+
+A topic subscription is a mechanism in Azure Service Bus that allows multiple consumers to receive copies of messages sent to a specific topic. It functions as  a virtual queue, where each subscription acts as an independent recipient of messages. When a message is sent to the topic, it is automatically forwarded to all associated subscriptions. 
+
+Topic can be set with multiple properties which can be used as a filtration for a client, while queues does not implement the filtration option. 
+
+\subsubsection{Formats}
+The messages could be constructed in following formats:  JSON, XML, Apache Avro, Plain Text. 
+
+\subsubsection{Protocols}
+The messages is Azure Service Bus can be send by following protocols:
+AMQP 1.0/1.1 (Advanced Message Queuing Protocol), MQTT 3.1 (MQ Telemetry Transport), OpenWire 2, 0MQ 2, STOMP 1.2, or HTTP 1.1
+
+\subsubsection{Configuration}(depth 2)
+Azure Service Bus provides few features allowing customize message broker. 
+
+Dead-lettering 
+Subqueue which hold messages which can't be revived nor processed by any client. 
+Can be removed then and inspected, to repair it or resubmit. 
+
+Scheduled delivery
+
+Partitioning 
+Standard queue or topic is handled by a single message broker and stored in one messaging store. However thanks to the  feature 'Partitioning',throughput of a partitioned entity is no longer limited by the performance of a single message 
+ because it enables queue and topics to be partitioned across multiple message brokers.
+ 
+Feature partitioning is limited regarding to the tier. 
+When partitioning is enabled in the Basic or Standard SKUs, we will always create 16 partitions.
+When partitioning is enabled in the Premium SKU, the amount of partitions is specified during namespace creation.
+ 
+ The Test will be performed on the standard Tier. 
+ 
+\subsection{RabbitMQ}
+RabbitMq is message broker which accepts and forwards messages.
+The messages are send through the Advanced Message Queuing Protocol(AMQP). Advanced Message Queuing Protocol is an programmable protocol which mean that entities and routing schemes are primarily defined by applications themselves, not a broker administrator. Accordingly, provision is made for protocol operations that declare queues and exchanges, define bindings between them, subscribe to queues and so on. [ ref {https://www.rabbitmq.com/tutorials/amqp-concepts.html]
+
+The messages published by publisher are not directly transferred to the queue, they are transfered to the exchange. Exhchange is responsible for routing messages to different queue, using binding(link between a queue and an exchange) and routing keys. 
+
+\paragraph{Exchanges Types}
+Exchanges take message and route into zero or more queues, depending on the exchange type and bindings.
+\subparagraph{Direct exchange}
+ It uses the message routing key ( which is an message attribute added to the message header) to transport messages into the queue. If the message routing key does not match any binding key, the message is discard.
+\subparagraph{Default exchange} 
+A default exchange is an direct exchange with no name, pre-declared by the broker.  It has one particular feature that makes it useful for simple applications: every queue created is automatically bound to it using a routing key that matches the queue name.
+For instance, if a queue is declared with the name "search-indexing-online," the AMQP 0-9-1 broker will automatically bind it to the default exchange using "search-indexing-online" as the routing key (also known as the binding key). As a result, any message published to the default exchange with the routing key "search-indexing-online" will be routed to the queue "search-indexing-online." 
+
+\subparagraph{Topic Exchange} 
+It is similar to the direct exchange however topic exchange instead of using fixed routing key, it uses wildcards. The message is routed to one or many queues, basing on a matching between a message routing key and pattern. A routing pattern of “university.*.*.technology” only match routing keys where the first word is “university" and the fourth word is “technology”.
+
+\subparagraph{Fanout Exchange}
+Fanout xxchange routes message to all the queues bounded to it, ignoring the routing key. It is ideal for the broadcast routing of messages. The exemplary usage of this exchange is the system where the same messages should be catch by the mobile application and web application or group chats where messages are distrubibuted between participants. 
+
+\subparagraph{Header Exchange}
+Header exchange uses routing on multiple attributes that are more easily expressed as message header than as a routing key. It is similar to the topic exchange however it uses the header attribute instead of routing key, which is here ignored. Specific argument termed “x-match” indicates whether all headers must match or only one. The headers can be build not only with string but also with types such as integers or hashes. 
+ \subsection{REST API}
+
+\chapter{Implementation}
+This chapter provides details about the use-case that has been implemented in order to evaluate the impact technology to the communication between microservices
+
+-architektura projektu
+- deployment na contenera
+
+-Test setup
+- dane 
+- jakie technologie 
+The experiments are performed in 2 ways: 
+1) Using JMeter Tool
+2) Using Test Case/ Application implementation
+
+
+\section{Application}
+A system in microservice architecture has been implemented, in order to simulate a real traffic between subsystems. 
+
+In this scenario, the goal is to fetch messages producted by the producer application from cliens applications. The whole system is implemented in the .NET 6 framework and each microservice is deployed as a single container on the docker local environment.
+\subsection{Architecture}
+The project is a microservices-based application developed in C\#, where each microservice is implemented as a separate ASP.NET Core application using .NET 6. The application is designed to provide a scalable and modular architecture, allowing independent development and deployment of each microservice. 
+
+Containers ordinarily get their own private network that is separate to the host stack. However in order to to use inter-container networking to perform communication between them, containers are allowed to share host's network stack. It means that they are allowed to access the host machine's localhost instead  of the container's host itself. 
+ 
+The figure BLABLA provides an overview of data flow in whole the system. Once the data is collected and processed by the publisher application, it is resend to the particular data stores. Then the data is catch by client applications and send via websocket to the virtual machine over the websocket. 
+
+Whole system is consisted of.......
+
+\subsection{Producer Application}
+Producer application is a microservice which is provided with a set of data.  In reference to the microservices principles, there is no option to share common database within subsystems. The primary objective of the application is to process and services data efficiently with clients, using RESTful and asynchronous communication methods.  Producer dispatches data to designated message brokers: RabbitMq broker, Azure Service Broker and saves it in the local database.
+When RESTClient microservice request access to previously processed data Producer Application retrieving  data from the database and delivers it synchronously to the clients in response to HTTP requests.
+The producer functionalities are invoked by the HTTP Request to following endpoints: 
+\begin{description}[style=nextline, font=\normalfont\textbf]
+  \item [HTTP POST] \textnormal{\texttt{host/api/publisher/produce/rabbitMq}}
+  Following endpoint while invoked, starts the process of publishing set of data to the RabbitMq Broker.
+
+  \item [HTTP POST \texttt{host/api/publisher/produce/azureServiceBusQueue}]
+  Following endpoint while invoked, starts the process of publishing set of data to the Azure Service Bus Queue.
+
+  \item [HTTP POST \texttt{host/api/publisher/produce/azureServiceBusTopic}]
+  Following endpoint while invoked, starts the process of publishing set of data to the Azure Service Bus Topic.
+
+  \item [HTTP POST \texttt{host/api/publisher/produce/database}]
+  Following endpoint while invoked, starts saving data into the local database. The aim of the process is related to synchronous REST communication. Due to the fact that with REST, data by client applications is received directly from the manufacturer's application, the manufacturer must have a place where the data will be stored until the client application requests it.
+\end{description}
+Producer application has separate controller for REST Communication with REST Client microservice. 
+\begin{description}[style=nextline, font=\normalfont\textbf]
+  \item [HTTP GET \texttt{host/api/publisher/RESTDataProvider/GetById/{id}}]
+  RestClient microservice asks the Producer to get single data by calling the following endpoint, including the objectId in the request params. The Producer retrieves the object from the database and returns it in the response to the request.
+
+  \item [HTTP GET \texttt{host/api/publisher/RESTDataProvider/GetAll}]
+  RestClient microservice requests the Producer to get all produced data by calling the following endpoint. The Producer retrieves all the objects from the database and returns them as a list in the response to the request.
+\end{description}
+
+Figure no [] provides the architecture schema of Publisher Web API. 
+
+\subsection{REST Client Microservice}
+Rest client API is an application is built on ASP.NET Core technology, to retrieve data from the Producer API using the HTTP protocol and REST API principles.
+The application serves as a data consumer and interacts with Producer API to obtain required data in synchronous manner. Rest Client API sends HTTP GET requests directly to the Producer API. Upon a successful response from the Producer API, the application receives the requested data.  In case of any error during the API call error, application handles the exception. 
+
+The Rest Client API has been designed to also establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided 2 endpoints:
+\begin{description}[style=nextline, font=\normalfont\textbf]
+  \item [HTTP GET \texttt{host/api/RestClient/all}]
+  It initializes the process of obtaining all produced data from Producer API. As a response, application returns list of messages.
+   \item [HTTP GET \texttt{host/api/RestClient/{id}}]
+     It initializes the process of obtaining single  data from Producer API. As a response application returns single message.
+\end{description}
+\subsection{RabbitMQ Consumer}
+RabbitMQ Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using RabbitMQ message broker over the AMQP protocol. 
+
+The application serves as consumer application, which is representation for the asynchronous communication. It does not interact with Producer API directly, but rather they communicate via an intermediary known as message broker. RabbitMQ message broker is deployed as a separate container on the local environment, using Docker image for RabbitMQ. The RabbitMQ Docker image is based on the official RabbitMQ image available on Docker Hub, and it is created using a Dockerfile. The Dockerfile defines the instructions to build the image, including the base image, environment setup, and any additional configurations needed for RabbitMQ.
+
+Once the RabbitMQ Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to pick it up.  
+
+The  RabbitMQ Client API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
+following endpoints: 
+
+\begin{description}[style=nextline, font=\normalfont\textbf]
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/single}]
+  It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/all}]
+It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
+\end{description}
+\subsection{Azure Service Bus Consumer}
+Azure Service Bus Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker over the AMQP protocol. 
+
+Azure Service Bus Consumer API substitute of RabbitMQ Consumer API in the context of messaging systems. It implements the connection to the cloud-based message as opposed to the traditional local deployment of RabbitMQ.
+
+Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to pick it up. 
+
+Referring to the possibilities offered by Azure, a solution for collecting data from both queues and topics was implemented. 
+
+
+The Azure Service Bus Consumer API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
+following endpoints: 
+\begin{description}[style=nextline, font=\normalfont\textbf]
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/single}]
+  It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/all}]
+It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
+\end{description}
+
+\subsection{Architecture}
+
+\chapter{Experiments}
+The experiment section presents the description, exemplary implementation and the results of survey in examination various types of scenarios in communication between microservices. 
+ Each experiment is aimed to found the advantages and disadvantages of using the selected communication pattern for a specific use case.
+\section{ First experiment}
+
+"The client application wants to use the data already processed by the producer application. The data has been placed in various resources depending on the technology that microservices communicate with each other. The producer application does not need to get information about whether the data has been received by the client. The customer receives the data when he needs it, so that he does not store it in his system unnecessarily" 
+
+The experiment was divided into two variants. 
+Variant A - The client receives the data individually, one request for each query
+Variant B - The customer receives all the data available to him in the system with one query
+
+\subsubsection{One data per request}
+\subsubsection{Configuration}
+
+\paragraph{RabbitMQ}
+For the project purpose 
+\subparagraph{Rest API}
+\subparagraph{Azure Service Bus}
+\subparagraph{RabbitMq}
+\subparagraph{Rest API}
+%\chapter{[Subject of the thesis]}
+%
+%\begin{itemize}
+%\item solution to the problem proposed by the author of the thesis
+%\item theoretical analysis of proposed solutions
+%\item rationale of applied methods, algorithms, and tools
+%\end{itemize}
+
+
+% TODO
+\chapter{Experiments}
+%
+%This chapter presents the experiments. It is a crucial part of the thesis and has to dominate in the thesis. 
+%The experiments and their analysis should be done in the way commonly accepted in the scientific community (eg. benchmark datasets, cross validation of elaborated results, reproducibility and replicability of tests etc).
+%
+%
+%\section{Methodology}
+%
+%\begin{itemize}
+%\item description of methodology of experiments
+%\item description of experimental framework (description of user interface of research applications – move to an appendix)
+%\end{itemize}
+%
+%
+%\section{Data sets}
+%
+%\begin{itemize}
+%\item description of data sets
+%\end{itemize}
+%
+%
+%\section{Results}
+%
+%\begin{itemize}
+%\item presentation of results, analysis and wide discussion of elaborated results, conclusions
+%\end{itemize}
+%
+%
+%
+%\begin{table}
+%\centering
+%\caption{A caption of a table is ABOVE it.}
+%\label{id:tab:wyniki}
+%\begin{tabular}{rrrrrrrr}
+%\toprule
+%	         &                                     \multicolumn{7}{c}{method}                                      \\
+%	         \cmidrule{2-8}
+%	         &         &         &        \multicolumn{3}{c}{alg. 3}        & \multicolumn{2}{c}{alg. 4, $\gamma = 2$} \\
+%	         \cmidrule(r){4-6}\cmidrule(r){7-8}
+%	$\zeta$ &     alg. 1 &   alg. 2 & $\alpha= 1.5$ & $\alpha= 2$ & $\alpha= 3$ &   $\beta = 0.1$  &   $\beta = -0.1$ \\
+%\midrule
+%	       0 &  8.3250 & 1.45305 &       7.5791 &    14.8517 &    20.0028 & 1.16396 &                       1.1365 \\
+%	       5 &  0.6111 & 2.27126 &       6.9952 &    13.8560 &    18.6064 & 1.18659 &                       1.1630 \\
+%	      10 & 11.6126 & 2.69218 &       6.2520 &    12.5202 &    16.8278 & 1.23180 &                       1.2045 \\
+%	      15 &  0.5665 & 2.95046 &       5.7753 &    11.4588 &    15.4837 & 1.25131 &                       1.2614 \\
+%	      20 & 15.8728 & 3.07225 &       5.3071 &    10.3935 &    13.8738 & 1.25307 &                       1.2217 \\
+%	      25 &  0.9791 & 3.19034 &       5.4575 &     9.9533 &    13.0721 & 1.27104 &                       1.2640 \\
+%	      30 &  2.0228 & 3.27474 &       5.7461 &     9.7164 &    12.2637 & 1.33404 &                       1.3209 \\
+%	      35 & 13.4210 & 3.36086 &       6.6735 &    10.0442 &    12.0270 & 1.35385 &                       1.3059 \\
+%	      40 & 13.2226 & 3.36420 &       7.7248 &    10.4495 &    12.0379 & 1.34919 &                       1.2768 \\
+%	      45 & 12.8445 & 3.47436 &       8.5539 &    10.8552 &    12.2773 & 1.42303 &                       1.4362 \\
+%	      50 & 12.9245 & 3.58228 &       9.2702 &    11.2183 &    12.3990 & 1.40922 &                       1.3724 \\
+%\bottomrule
+%\end{tabular}
+%\end{table}  
+
+%%%%%%%%%%%%%%%%%%%%%
+% FIGURE FROM FILE
+%
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.5\textwidth]{./politechnika_sl_logo_bw_pion_en.pdf}
+%\caption{Caption of a figure is always below the figure.}
+%\label{fig:label}
+%\end{figure}
+%Fig. \ref{fig:label} presents …
+%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%
+%% SUBFIGURES
+%
+%\begin{figure}
+%\centering
+%\begin{subfigure}{0.4\textwidth}
+%    \includegraphics[width=\textwidth]{./politechnika_sl_logo_bw_pion_en.pdf}
+%    \caption{Upper left figure.}
+%    \label{fig:upper-left}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}{0.4\textwidth}
+%    \includegraphics[width=\textwidth]{./politechnika_sl_logo_bw_pion_en.pdf}
+%    \caption{Upper right figure.}
+%    \label{fig:upper-right}
+%\end{subfigure}
+%
+%\begin{subfigure}{0.4\textwidth}
+%    \includegraphics[width=\textwidth]{./politechnika_sl_logo_bw_pion_en.pdf}
+%    \caption{Lower left figure.}
+%    \label{fig:lower-left}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}{0.4\textwidth}
+%    \includegraphics[width=\textwidth]{./politechnika_sl_logo_bw_pion_en.pdf}
+%    \caption{Lower right figure.}
+%    \label{fig:lower-right}
+%\end{subfigure}
+%        
+%\caption{Common caption for all subfigures.}
+%\label{fig:subfigures}
+%\end{figure}
+%Fig. \ref{fig:subfigures} presents very important information, eg. Fig. \ref{fig:upper-right} is an upper right subfigure.
+%%%%%%%%%%%%%%%%%%%%%
+
+
+%
+%\begin{figure}
+%\centering
+%\begin{tikzpicture}
+%\begin{axis}[
+%    y tick label style={
+%        /pgf/number format/.cd,
+%            fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+%            fixed zerofill, % 1.0 zamiast 1
+%            precision=1,
+%        /tikz/.cd
+%    },
+%    x tick label style={
+%        /pgf/number format/.cd,
+%            fixed,
+%            fixed zerofill,
+%            precision=2,
+%        /tikz/.cd
+%    }
+%]
+%\addplot [domain=0.0:0.1] {rnd};
+%\end{axis} 
+%\end{tikzpicture}
+%\caption{Figure caption is BELOW the figure.}
+%\label{fig:2}
+%\end{figure}
+%
+%\begin{figure}
+%\begin{lstlisting}
+%if (_nClusters < 1)
+%	throw std::string ("unknown number of clusters");
+%if (_nIterations < 1 and _epsilon < 0)
+%	throw std::string ("You should set a maximal number of iteration or minimal difference -- epsilon.");
+%if (_nIterations > 0 and _epsilon > 0)
+%	throw std::string ("Both number of iterations and minimal epsilon set -- you should set either number of iterations or minimal epsilon.");
+%\end{lstlisting}
+%\caption{Example of pseudocode.}
+%\end{figure}
+
+% TODO
+\chapter{Summary}
+
+%\begin{itemize}
+%\item What problem have I solved?
+%\item How have I solved the problem?
+%\item What are pros and cons of my solutions?
+%\item Can I state some recommendations?
+%\end{itemize}
+
+\begin{itemize}
+\item synthetic description of performed work
+\item conclusions
+\item  future development, potential future research
+\item Has the objective been reached?
+\end{itemize}
+
+
+
+\backmatter
+
+%\bibliographystyle{plain}  % bibtex
+%\bibliography{biblio} % bibtex
+\printbibliography           % biblatex
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\begin{appendices}
+% TODO
+\chapter{Technical documentation}
+
+
+% TODO
+\chapter{List of abbreviations and symbols}
+
+\begin{itemize}
+\item[DNA] deoxyribonucleic acid
+\item[MVC] model--view--controller 
+\item[$N$] cardinality of data set
+\item[$\mu$] membership function of a fuzzy set
+\item[$\mathbb{E}$] set of edges of a graph
+\item[$\mathcal{L}$] Laplace transformation
+\end{itemize}
+
+% TODO
+\chapter{List of additional files in~electronic submission (if applicable)}
+
+Additional files uploaded to the system include:
+\begin{itemize}
+\item source code of the application,
+\item test data,
+\item a video file showing how software or hardware developed for thesis is used,
+\item etc.
+\end{itemize}
+
+
+% TODO
+\chapter{Biblography}
+\begin{thebibliography}{9} % 9 to przykładowa maksymalna liczba odwołań
+
+\bibitem{bib:article1}
+[1] Surname, Name and Name Surname. "Title of an article in a journal." \emph{Journal Title} 157.8 (2016): 1092--1113.
+
+\bibitem{bib:article2}
+[2] Dongjin Yu, Yike Jin, Yuqun Zhang, Xi Zheng. "A survey on security issues in services communication of Microservices-enabled fog applications." \emph{Wiley} 19 (2017): 2-3.
+
+\bibitem{bib:conference}
+[3] Name Surname, Surname, Name, and N. Surname. "Title of a conference article." \emph{Conference title} (2006): 5346--5349.
+
+\bibitem{bib:internet1}
+[4] Name Surname, Surname, Name, and N. Surname. "Title of a web page." (2021). \\ \url{http://somewhere/on/the/internet.html}. (Accessed: 2021-09-30).
+
+\bibitem{bib:book1}
+[5] Bob Familiar. \emph{Microservices, IoT, and Azure}. Appress, 2015.
+
+\bibitem{bib:book2}
+[6] Sam Newman. \emph{Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith}. O'Reilly Media, Inc, 2020.
+
+\bibitem{bib:internet2}
+[7] Sasha Mathews. "4 Ways to Establish Communication between Microservices." (2022). \\ \url{https://levelup.gitconnected.com/4-ways-to-establish-communication-between-microservices-984207f29497}. (Accessed: Jan 25, 2022).
+
+\bibitem{bib:book3}
+[8] Vinicius Feitosa Pacheco. \emph{Microservice Patterns and Best Practices}. Packt Publishing, 2018.
+
+\bibitem{bib:internet3}
+[9] Mehmet Ozkaya. "Microservices Communications." (2021). \\ \url{https://medium.com/design-microservices-architecture-with-patterns/microservices-communications-f319f8d76b71}. (Accessed: Sep 7, 2021).
+
+\bibitem{bib:internet4}
+[10] Alibaba Cloud. "What Is Containerization?" \\ \url{https://www.alibabacloud.com/knowledge/what-is-containerization}.
+
+\bibitem{bib:AzureServiceBus}
+[11] Ashish Patel. "Azure — Difference between Azure Service Bus Queues and Topics." (2021). \\ \url{https://medium.com/awesome-azure/azure-difference-between-azure-service-bus-queues-and-topics-comparison-azure-servicebus-queue-vs-topic-4cc97770b65}. (Accessed: Jul 4, 2021).
+
+\bibitem{bib:WindowsAzure}
+[12] Don Chambers. "Windows Azure: Using Windows Azure's Service Bus to Solve Data Security Issues" (2010)
+
+\bibitem{bib:WindowsAzure}
+[13] Espen Tønnessen Nordli "Event-based Customisation of MultiTenant SaaS Using Microservices" (2020)
+
+\bibitem{bib:AMQPRest}
+[14] Espen Tønnessen Nordli "Performance Evaluation of RESTful Web Services and AMQP Protocol" (2020)
+\end{thebibliography}
+
+
+
+\listoffigures
+\addcontentsline{toc}{chapter}{List of figures}
+\listoftables
+\addcontentsline{toc}{chapter}{List of tables}
+
+\end{appendices}
+
+\end{document}
+
+
+%% Finis coronat opus.
+
+
+
+%% Finis coronat opus.
+

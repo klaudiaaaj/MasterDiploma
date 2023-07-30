@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "IkRAje6KFbryEMf7AQ+YDJlDTFE8geWSWIf7XCZ+NEc=",
+  "Source": "RESTClient",
+  "BasePath": "_content/RESTClient",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

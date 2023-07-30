@@ -1,0 +1,13 @@
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\RabbitmqSubscriber.exe
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\appsettings.Development.json
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\appsettings.json
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\RabbitmqSubscriber.dll
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\RabbitmqSubscriber.deps.json
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\RabbitmqSubscriber.runtimeconfig.json
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\RabbitmqSubscriber.pdb
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\Microsoft.OpenApi.dll
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\RabbitMQ.Client.dll
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\RabbitmqSubscriber\bin\Release\net6.0\publish\System.Threading.Channels.dll

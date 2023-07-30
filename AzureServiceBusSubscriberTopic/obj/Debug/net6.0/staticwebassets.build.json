@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "KvvTlIMZrqKKtZQDAOyqHxXjH8ayXzbB4DrmZOOPKoE=",
+  "Source": "AzureServiceBusSubscriberTopic",
+  "BasePath": "_content/AzureServiceBusSubscriberTopic",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

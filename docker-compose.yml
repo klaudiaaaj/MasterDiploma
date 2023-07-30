@@ -1,0 +1,99 @@
+version: '3'
+services:
+  rabbitmqsubscriber:
+    build:
+      context: .
+      dockerfile: RabbitmqSubscriber/Dockerfile
+    ports:
+      - 8081:80
+    depends_on:
+      - rabbitmq
+    networks:
+      - mynetwork
+  publisher:
+    build:
+      context: .
+      dockerfile: Publisher/Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - rabbitmq
+    networks:
+      - mynetwork
+  restclient:
+    build:
+      context: .
+      dockerfile: RestClient/Dockerfile
+    ports:
+      - 8082:80
+    networks:
+      - mynetwork
+  azureservicebussubscriberQueue:
+    build:
+      context: .
+      dockerfile: AzureServiceBusSubscriberQueue/Dockerfile
+    ports:
+      - 8083:80
+    networks:
+      - mynetwork
+azureservicebussubscriberTopic:
+    build:
+      context: .
+      dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
+    ports:
+      - 8084:80
+    environment:
+      - SUBSCRIPTION_NAME=sub1
+    networks:
+      - mynetwork
+azureservicebussubscriberTopic2:
+    build:
+      context: .
+      dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
+    ports:
+      - 8085:80
+    environment:
+      - SUBSCRIPTION_NAME=sub2
+    networks:
+      - mynetwork
+azureservicebussubscriberTopic3:
+    build:
+      context: .
+      dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
+    ports:
+      - 8085:80
+    environment:
+      - SUBSCRIPTION_NAME=sub3
+    networks:
+      - mynetwork
+azureservicebussubscriberTopic4:
+    build:
+      context: .
+      dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
+    ports:
+      - 8085:80
+    environment:
+      - SUBSCRIPTION_NAME=sub4
+    networks:
+      - mynetwork
+azureservicebussubscriberTopic5:
+    build:
+      context: .
+      dockerfile: AzureServiceBusSubscriberTopic/Dockerfile
+    ports:
+      - 8085:80
+    environment:
+      - SUBSCRIPTION_NAME=sub5
+    networks:
+      - mynetwork
+rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
