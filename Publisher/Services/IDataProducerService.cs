@@ -1,5 +1,4 @@
 ﻿using Contracts.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Publisher.Services
 {

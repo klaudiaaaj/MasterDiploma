@@ -25,7 +25,7 @@ namespace AzureServiceBusSubscriber
             {
                 var messageReceivedTaskCompletionSource = new TaskCompletionSource<string>();
 
-                var queueClient = new QueueClient(_configuration["AzureConnectionString"], _configuration["Azure_QueueName"], ReceiveMode.PeekLock);
+                var queueClient = new QueueClient(_configuration["AZURE_CONNECTION_STRING"], _configuration["Azure_QueueName"], ReceiveMode.PeekLock);
 
                 queueClient.RegisterMessageHandler(
                     async (message, token) =>
@@ -33,21 +33,19 @@ namespace AzureServiceBusSubscriber
                         try
                         {
                             var messageBody = Encoding.UTF8.GetString(message.Body);
-                            Console.WriteLine($"Received: {messageBody}, time: {DateTime.Now}");
                             await queueClient.CompleteAsync(message.SystemProperties.LockToken);
-                            messageReceivedTaskCompletionSource.SetResult(messageBody); // Ustawienie wyniku TaskCompletionSource po odbiorze wiadomości
+                            messageReceivedTaskCompletionSource.SetResult(messageBody);
                             await queueClient.CloseAsync();
                         }
                         catch (Exception ex)
                         {
-                            messageReceivedTaskCompletionSource.SetException(ex); // Ustawienie wyjątku TaskCompletionSource w przypadku błędu
+                            messageReceivedTaskCompletionSource.SetException(ex);
                         }
                     },
                     new MessageHandlerOptions(async args => Console.WriteLine(args.Exception))
                     { MaxConcurrentCalls = 1, AutoComplete = true });
 
                 var receivedMessage = await messageReceivedTaskCompletionSource.Task; // Czekaj na dostanie wiadomości lub na wyjątek
-
 
                 return Ok(receivedMessage);
             }
@@ -59,25 +57,32 @@ namespace AzureServiceBusSubscriber
         [HttpGet("all")]
         public async Task<IActionResult> GetAllData()
         {
-            List<string> recivedMessages = new List<string>();
+            List<string> receivedMessages = new List<string>();
+            int targetMessageCount = 3000;
+            int maxWaitSeconds = 60; 
             try
             {
-                var queueClient = new QueueClient(_configuration["AzureConnectionString"], _configuration["Azure_QueueName"], ReceiveMode.PeekLock);
+                var queueClient = new QueueClient(_configuration["AZURE_CONNECTION_STRING"], _configuration["Azure_QueueName"], ReceiveMode.PeekLock);
 
                 var messageHandlerOptions = new MessageHandlerOptions(async args => Console.WriteLine(args.Exception))
-                { MaxConcurrentCalls = 1, AutoComplete = true };
+                {
+                    AutoComplete = true,
+                    MaxConcurrentCalls = 50
+                };
+
+                var messageReceivedTaskCompletionSource = new TaskCompletionSource<bool>();
 
                 queueClient.RegisterMessageHandler(async (message, token) =>
                 {
                     try
                     {
-                        while (recivedMessages.Count() < 50)
-                        {
-                            var messageBody = Encoding.UTF8.GetString(message.Body);
-                            Console.WriteLine($"Received: {messageBody}, time: {DateTime.Now}");
-                            recivedMessages.Add(messageBody); // Dodanie wiadomości do listy
-                        }
+                        var messageBody = Encoding.UTF8.GetString(message.Body);
+                        receivedMessages.Add(messageBody);
 
+                        if (receivedMessages.Count >= targetMessageCount)
+                        {
+                            messageReceivedTaskCompletionSource.TrySetResult(true);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -85,18 +90,17 @@ namespace AzureServiceBusSubscriber
                     }
                 }, messageHandlerOptions);
 
-                await Task.Delay(TimeSpan.FromSeconds(20)); // Odczekaj pewien czas na odebranie wiadomości
+                await Task.WhenAny(messageReceivedTaskCompletionSource.Task, Task.Delay(TimeSpan.FromSeconds(maxWaitSeconds)));
 
                 await queueClient.CloseAsync();
             }
             catch (Exception ex)
             {
-                // Obsługa błędu, jeśli wystąpił wyjątek podczas odbierania wiadomości
                 Console.WriteLine($"Exception occurred during message processing: {ex.Message}");
             }
 
-            return Ok(recivedMessages);
+            return Ok(receivedMessages);
         }
-
     }
+
 }

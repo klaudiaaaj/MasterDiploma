@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.ServiceBus;
 using System.Text;
 
 namespace AzureServiceBusSubscriber
@@ -15,33 +16,44 @@ namespace AzureServiceBusSubscriber
         public AzureServiceBusClientTopic(IConfiguration configuration, ILogger<AzureServiceBusClientTopic> logger)
         {
             _configuration = configuration;
-            _subscriptionName = Environment.GetEnvironmentVariable("SUBSCRIPTION_NAME");
+            _subscriptionName = "sub1";
+            //_subscriptionName = Environment.GetEnvironmentVariable("SUBSCRIPTION_NAME");
             _logger = logger;
-            _logger.LogInformation("Subscription", _subscriptionName);
+            _logger.LogInformation(_subscriptionName);
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAllData()
         {
             List<string> messagesResult = new List<string>();
+
             try
             {
-                await using var serviceBusClient = new ServiceBusClient("Endpoint=sb://azure-service-bus-master.servicebus.windows.net/;SharedAccessKeyName=reciver;SharedAccessKey=i5GWDQb4JKtKEc/uRYp7kjzFYzUtTCX3N+ASbCUo4bY=;EntityPath=bulk-send");
-                await using var receiver = serviceBusClient.CreateReceiver("bulk-send", _subscriptionName);
-                while (messagesResult.Count < 1000)
-                {
+                await using var serviceBusClient = new ServiceBusClient(_configuration["AzureConnectionStringTopic"]);
+                await using var receiver = serviceBusClient.CreateReceiver(_configuration["AzureTopic"], _subscriptionName);
 
-                    var messages = await receiver.ReceiveMessagesAsync(1000 - messagesResult.Count, TimeSpan.FromMinutes(2));
+                int batchSize = 256;
+                while (true)
+                {
+                    var messages = await receiver.ReceiveMessagesAsync(batchSize, TimeSpan.FromMinutes(2));
+
+                    if (messages.Count == 0)
+                    {
+                        break;
+                    }
+
                     foreach (var message in messages)
                     {
                         var messageBody = Encoding.UTF8.GetString(message.Body);
                         messagesResult.Add(messageBody);
+
+                        await receiver.CompleteMessageAsync(message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine($"Exception occurred during message processing: {ex.Message}");
             }
 
             return Ok(messagesResult);
@@ -52,13 +64,14 @@ namespace AzureServiceBusSubscriber
             List<string> messagesResult = new List<string>();
             try
             {
-                await using var serviceBusClient = new ServiceBusClient("Endpoint=sb://azure-service-bus-master.servicebus.windows.net/;SharedAccessKeyName=reciver;SharedAccessKey=i5GWDQb4JKtKEc/uRYp7kjzFYzUtTCX3N+ASbCUo4bY=;EntityPath=bulk-send");
-                await using var receiver = serviceBusClient.CreateReceiver("bulk-send", _subscriptionName);
+                await using var serviceBusClient = new ServiceBusClient(_configuration["AzureConnectionStringTopic"]);
+                await using var receiver = serviceBusClient.CreateReceiver(_configuration["AzureTopic"], _subscriptionName);
 
                 var messages = await receiver.ReceiveMessagesAsync(1, TimeSpan.FromMinutes(2));
                 if (messages != null)
                 {
                     var message = messages.FirstOrDefault();
+                    await receiver.CompleteMessageAsync(message);
                     return Ok(Encoding.UTF8.GetString(message.Body));
                 }
 

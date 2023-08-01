@@ -20,37 +20,51 @@ namespace Publisher.Services
             {
                 TransportType = ServiceBusTransportType.AmqpWebSockets
             };
-            client = new ServiceBusClient("Endpoint=sb://azure-service-bus-master.servicebus.windows.net/;SharedAccessKeyName=jmeter;SharedAccessKey=v0Y7610JrHUC1pCzCApZ8+0MRq4OTW9fC+ASbNK4WG0=;EntityPath=jmeter");
-            sender = client.CreateSender(_configuration["Azure_QueueName"]);
+            var connectionString = configuration["AZURE_CONNECTION_STRING"];
+            client = new ServiceBusClient(connectionString);
+            sender = client.CreateSender(configuration["Azure_QueueName"]);
         }
 
-        public async Task Send(IList<Joystic> message)  
+        public async Task Send(IList<Joystic> message)
         {
             try
             {
-                var list = message.Take(50);
+                int maxBatchSizeBytes = 200 * 1024; // 256 KB
+                List<ServiceBusMessage> serviceBusMessages = new List<ServiceBusMessage>();
+                long currentBatchSizeBytes = 0;
 
-                using ServiceBusMessageBatch messageBatch = await sender.CreateMessageBatchAsync();
-
-                for (int i = 0; i < list.Count(); i++)
+                for (int i = 0; i < message.Count; i++)
                 {
-                    var message2 = String.Join(",", message[i].time, message[i].axis_1, message[i].axis_2, message[i].button_1, message[i].button_2, message[i].id.ToString());
+                    var messageData = String.Join(",", message[i].time, message[i].axis_1, message[i].axis_2, message[i].button_1, message[i].button_2, message[i].id.ToString());
+                    var messageBytes = Encoding.UTF8.GetBytes(messageData);
+                    var serviceBusMessage = new ServiceBusMessage(messageBytes);
 
-                    if (!messageBatch.TryAddMessage(new ServiceBusMessage(Encoding.UTF8.GetBytes(message2))))
+                    long messageSizeBytes = messageBytes.Length;
+
+                    if (currentBatchSizeBytes + messageSizeBytes > maxBatchSizeBytes || serviceBusMessages.Count == 1800)
                     {
-                        // if it is too large for the batch
-                        throw new Exception($"The message {i} is too large to fit in the batch.");
+                        // Wysyłamy aktualną partię wiadomości, ponieważ dodanie następnej spowoduje przekroczenie maksymalnego rozmiaru
+                        await sender.SendMessagesAsync(serviceBusMessages);
+                        Console.WriteLine($"A batch of {serviceBusMessages.Count} messages has been published to the queue.");
+                        serviceBusMessages.Clear();
+                        currentBatchSizeBytes = 0;
                     }
+
+                    serviceBusMessages.Add(serviceBusMessage);
+                    currentBatchSizeBytes += messageSizeBytes;
                 }
-                await sender.SendMessagesAsync(messageBatch);
-                Console.WriteLine($"A batch of {messageBatch.Count} messages has been published to the queue.");
+
+                // Wysyłamy pozostałe wiadomości w ostatniej partii
+                if (serviceBusMessages.Count > 0)
+                {
+                    await sender.SendMessagesAsync(serviceBusMessages);
+                    Console.WriteLine($"A batch of {serviceBusMessages.Count} messages has been published to the queue.");
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
-
-
             finally
             {
                 // Calling DisposeAsync on client types is required to ensure that network
@@ -59,8 +73,6 @@ namespace Publisher.Services
                 await client.DisposeAsync();
             }
 
-            Console.WriteLine("Press any key to end the application");
-            Console.ReadKey();
         }
     }
 }

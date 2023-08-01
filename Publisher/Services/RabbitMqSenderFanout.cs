@@ -31,11 +31,11 @@ namespace Publisher.Services
 
             channel.ExchangeDeclare(exchange: "my-fanout-exchange", type: ExchangeType.Fanout);
           
-            channel.QueueDeclare("consumer1", durable: true, autoDelete: false, exclusive: false);
-            channel.QueueDeclare("consumer2", durable: true, autoDelete: false, exclusive: false);
-            channel.QueueDeclare("consumer3", durable: true, autoDelete: false, exclusive: false);
-            channel.QueueDeclare("consumer4", durable: true, autoDelete: false, exclusive: false);
-            channel.QueueDeclare("consumer5", durable: true, autoDelete: false, exclusive: false);
+            channel.QueueDeclare("consumer1", durable: false, autoDelete: false, exclusive: false);
+            channel.QueueDeclare("consumer2", durable: false, autoDelete: false, exclusive: false);
+            channel.QueueDeclare("consumer3", durable: false, autoDelete: false, exclusive: false);
+            channel.QueueDeclare("consumer4", durable: false, autoDelete: false, exclusive: false);
+            channel.QueueDeclare("consumer5", durable: false, autoDelete: false, exclusive: false);
 
             channel.QueueBind("consumer1", "my-fanout-exchange", "");
             channel.QueueBind("consumer2", "my-fanout-exchange", "");
@@ -52,8 +52,6 @@ namespace Publisher.Services
                                                 basicProperties: null,
                                                 body: Encoding.UTF8.GetBytes(String.Join(",", joystic.time, joystic.axis_1, joystic.axis_2, joystic.button_1, joystic.button_2, id.ToString())));
             }
-
-            Console.WriteLine(" Press [enter] to exit.");
 
             return Task.CompletedTask;
         }

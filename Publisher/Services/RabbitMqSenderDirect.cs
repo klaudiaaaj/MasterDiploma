@@ -42,8 +42,6 @@ namespace Publisher.Services
                                                 body: Encoding.UTF8.GetBytes(String.Join(",", joystic.time, joystic.axis_1,                      joystic.axis_2, joystic.button_1, joystic.button_2, id.ToString())));
             }
 
-            Console.WriteLine(" Press [enter] to exit.");
-
             return Task.CompletedTask;
         }
     }

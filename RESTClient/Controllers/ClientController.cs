@@ -18,7 +18,7 @@ namespace RESTClient.cs.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetDataAll()
         {
-            var response = await _httpClient.GetAsync("http://host.docker.internal:8080/RestGetAll");
+            var response = await _httpClient.GetAsync("http://host.docker.internal:8080/api/publisher/RESTDataProvider/GetAll");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
@@ -35,7 +35,7 @@ namespace RESTClient.cs.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDataById(string id)
         {
-            var response = await _httpClient.GetAsync($"http://host.docker.internal:8080/RetGetById/{id}");
+            var response = await _httpClient.GetAsync($"http://host.docker.internal:8080/api/publisher/RESTDataProvider/GetById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();

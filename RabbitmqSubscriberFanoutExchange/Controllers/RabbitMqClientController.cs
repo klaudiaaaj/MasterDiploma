@@ -26,7 +26,7 @@ namespace RabbitmqSubscriber.Controllers
             var test = _configuration["RabbitMQHost"];
             var test2 = _configuration["RabbitMQPort"];
             _queueName = Environment.GetEnvironmentVariable("QUEUE_NAME");
-            _logger.LogInformation("queue name", _queueName);
+            _logger.LogInformation( _queueName);
             _connectionFactory = new ConnectionFactory() { HostName = _configuration["RabbitMQHost"], Port = port };
 
             using var connection = _connectionFactory.CreateConnection();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Contracts.Models;
+using Microsoft.AspNetCore.Mvc;
 using Publisher.Services;
 
 namespace Publisher.Controllers
@@ -14,6 +15,7 @@ namespace Publisher.Controllers
         public readonly IAzureServiceBusSenderTopic azureServiceBusSenderTopic;
         public readonly IDataProducerService dataProducerService;
         public readonly ISqLiteRepo sqLiteRepo;
+        public readonly IList<Joystic> iJoysticList;
 
         public CommunicationController(IRabbitMqSenderDirect rabbitMqSender, IKaffkaSender kaffkaSender, IAzureServiceBusSender azureServiceBusSender, IDataProducerService dataProducerService, ISqLiteRepo sqLiteRepo, IAzureServiceBusSenderTopic azureServiceBusSenderTopic, IRabbitMqSenderFanout rabbitMqSenderFanout)
         {
@@ -24,13 +26,19 @@ namespace Publisher.Controllers
             this.sqLiteRepo = sqLiteRepo;
             this.azureServiceBusSenderTopic = azureServiceBusSenderTopic;
             this.rabbitMqSenderFanout = rabbitMqSenderFanout;
+            iJoysticList = dataProducerService.GetJoysticData();
+        }
+        [HttpGet("produce")]
+        public Task ProduceData()
+        {
+            return Task.CompletedTask;
         }
 
         [HttpPost("rabbitMq/direct")]
         public Task SendDataByRabbitMqDirect()
         {
-            var data = dataProducerService.GetJoysticData();
-            rabbitMqSenderDirect.Send(data);
+            var task = rabbitMqSenderDirect.Send(iJoysticList);
+            task.Wait();
 
             return Task.CompletedTask;
         }
@@ -38,26 +46,16 @@ namespace Publisher.Controllers
         [HttpPost("rabbitMq/fanout")]
         public Task SendDataByRabbitMqFanout()
         {
-            var data = dataProducerService.GetJoysticData();
-            rabbitMqSenderFanout.Send(data);
-
-            return Task.CompletedTask;
-        }
-
-        [HttpPost("kaffka")]
-        public Task SendByKaffka()
-        {
-            var data = dataProducerService.GetJoysticData();
-            kaffkaSender.Send(data);
-
+            var task = rabbitMqSenderFanout.Send(iJoysticList);
+            task.Wait();
             return Task.CompletedTask;
         }
 
         [HttpPost("azureServiceBusQueue")]
         public Task SendDataByAzureServiceBus()
         {
-            var data = dataProducerService.GetJoysticData();
-            azureServiceBusSenderQueue.Send(data);
+            var task = azureServiceBusSenderQueue.Send(iJoysticList);
+            task.Wait();
 
             return Task.CompletedTask;
         }
@@ -65,8 +63,9 @@ namespace Publisher.Controllers
         [HttpPost("azureServiceBusTopic")]
         public Task SendDataByAzureServiceBusTopic()
         {
-            var data = dataProducerService.GetJoysticData();
-            azureServiceBusSenderTopic.Send(data);
+
+            var task = azureServiceBusSenderTopic.Send(iJoysticList);
+            task.Wait();
 
             return Task.CompletedTask;
         }
@@ -74,10 +73,9 @@ namespace Publisher.Controllers
         [HttpPost("database")]
         public Task SendBtRestToDatabase()
         {
-            var data = dataProducerService.GetJoysticData();
-            if (data.Count > 0)
+            if (iJoysticList.Count > 0)
             {
-                sqLiteRepo.InsertAllJoystics(data);
+                sqLiteRepo.InsertAllJoystics(iJoysticList);
             }
             return Task.CompletedTask;
         }

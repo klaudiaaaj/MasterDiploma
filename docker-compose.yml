@@ -80,7 +80,7 @@ services:
       - rabbitmq
     networks:
       - mynetwork
-  restclient:
+  restclient1:
     build:
       context: .
       dockerfile: RestClient/Dockerfile
@@ -88,6 +88,38 @@ services:
       - 8082:80
     networks:
       - mynetwork
+  restclient2:
+    build:
+      context: .
+      dockerfile: RestClient/Dockerfile
+    ports:
+      - 8094:80
+    networks:
+      - mynetwork
+  restclient3:
+    build:
+      context: .
+      dockerfile: RestClient/Dockerfile
+    ports:
+      - 8095:80
+    networks:
+      - mynetwork
+  restclient4:
+    build:
+      context: .
+      dockerfile: RestClient/Dockerfile
+    ports:
+      - 8096:80
+    networks:
+      - mynetwork
+  restclient5:
+    build:
+      context: .
+      dockerfile: RestClient/Dockerfile
+    ports:
+      - 8097:80
+    networks:
+      - mynetwork 
   azureservicebussubscriberqueue:
     build:
       context: .
