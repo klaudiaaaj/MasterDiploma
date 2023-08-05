@@ -23,16 +23,15 @@ namespace Publisher.Controllers
         {
             try
             {
-                var test = sqLiteRepo.GetJoysticById(id);
-                _logger.LogInformation("Data: ", test.ToString());
-                return Ok(test);
+                // Retrieve a single Joystick message by its ID using the sqLiteRepo
+                var message = sqLiteRepo.GetJoystickById(id);
 
+                // Return the retrieved Joystick message as a successful response
+                return Ok(message);
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex.Message, ex);
-
-                throw ex;
+                throw; // Re-throw the exception to be handled further up the call stack
             }
         }
 
@@ -41,16 +40,17 @@ namespace Publisher.Controllers
         {
             try
             {
-                var test = sqLiteRepo.GetAllJoystics();
-                _logger.LogInformation("Data: ", test.Count);
+                // Retrieve all Joystick messages using the sqLiteRepo
+                var messages = sqLiteRepo.GetAllJoysticks();
 
-                return Ok(test);
+                // Return the list of Joystick messages as a successful response
+                return Ok(messages);
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogError(ex.Message, ex);
-                throw ex;
+                throw; // Re-throw the exception to be handled further up the call stack
             }
         }
+
     }
 }

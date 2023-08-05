@@ -8,12 +8,12 @@ namespace Publisher.Services
 {
     public class DataProducerService : IDataProducerService
     {
-        string _sheetPath = @"joystick_data.csv";
+        string _sheetPath = @"Joystickk_data.csv";
 
-        public IList<Joystic> GetJoysticData()
+        public IList<Joystick> GetJoystickData()
         {
-            IList<Joystic> joysticData = new List<Joystic>();
-            IList<Joystic> joysticData2 = new List<Joystic>();
+            IList<Joystick> JoystickData = new List<Joystick>();
+            IList<Joystick> JoystickData2 = new List<Joystick>();
 
             //////Read the data
             using (var reader = new StreamReader(_sheetPath))
@@ -25,15 +25,15 @@ namespace Publisher.Services
                 };
                 using (var csv = new CsvReader(reader, config))
                 {
-                    var joystickData = csv.GetRecords<Joystic>();
-                    foreach (var joystick in joystickData.Take(300000))
+                    var JoystickkData = csv.GetRecords<Joystick>();
+                    foreach (var Joystickk in JoystickkData.Take(300000))
                     {
-                        joysticData2.Add(joystick);
+                        JoystickData2.Add(Joystickk);
                     }
-                    joysticData = joysticData.ToList();
+                    JoystickData = JoystickData.ToList();
                 }
             }
-            return joysticData2;
+            return JoystickData2;
         }
     }
 }

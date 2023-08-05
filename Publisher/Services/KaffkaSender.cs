@@ -14,7 +14,7 @@ namespace Publisher.Services
             _logger = logger;
         }
 
-        public async Task Send(IList<Joystic> message)
+        public async Task Send(IList<Joystick> message)
         {
             string bootstrapServers = $"{ _configuration["KaffkaHost"]}:{ _configuration["KaffkaPort"]}";
             // Adres serwera Kafka
@@ -24,10 +24,10 @@ namespace Publisher.Services
             {
                 try
                 {
-                    foreach (Joystic joystic in message)
+                    foreach (Joystick Joystick in message)
                     {
                         var id = Guid.NewGuid();
-                        var deliveryReport = await producer.ProduceAsync(topic, new Message<Null, string> { Value = joystic.axis_1 });
+                        var deliveryReport = await producer.ProduceAsync(topic, new Message<Null, string> { Value = Joystick.axis_1 });
                         Console.WriteLine($"Wiadomość wysłana do Kafka. Temat: {deliveryReport.Topic}, Partycja: {deliveryReport.Partition}, Offset: {deliveryReport.Offset}");
                     }
                 }

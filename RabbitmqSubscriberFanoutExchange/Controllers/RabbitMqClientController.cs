@@ -14,7 +14,7 @@ namespace RabbitmqSubscriber.Controllers
         private ConnectionFactory _connectionFactory;
         private string _queueName;
         private readonly ILogger<RabbitMqClientController> _logger;
-        private readonly TaskCompletionSource<Joystic> _completionSource = new TaskCompletionSource<Joystic>();
+        private readonly TaskCompletionSource<Joystick> _completionSource = new TaskCompletionSource<Joystick>();
         private ManualResetEvent _resetEvent = new ManualResetEvent(false);
 
         public RabbitMqClientController(IConfiguration configuration, ILogger<RabbitMqClientController> logger)

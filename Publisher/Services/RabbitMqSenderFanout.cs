@@ -24,7 +24,7 @@ namespace Publisher.Services
             _connectionFactory = new ConnectionFactory() { HostName = _configuration["RabbitMQHost"], Port = int.Parse(_configuration["RabbitMQPort"]) };
         }
 
-        public Task Send(IList<Joystic> message)
+        public Task Send(IList<Joystick> message)
         {
             using var connection = _connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
@@ -44,13 +44,13 @@ namespace Publisher.Services
             channel.QueueBind("consumer5", "my-fanout-exchange", "");
 
 
-            foreach (Joystic joystic in message)
+            foreach (Joystick Joystick in message)
             {
                 var id = Guid.NewGuid();
                 channel.BasicPublish(exchange: "my-fanout-exchange",
                                                 routingKey: "",
                                                 basicProperties: null,
-                                                body: Encoding.UTF8.GetBytes(String.Join(",", joystic.time, joystic.axis_1, joystic.axis_2, joystic.button_1, joystic.button_2, id.ToString())));
+                                                body: Encoding.UTF8.GetBytes(String.Join(",", Joystick.time, Joystick.axis_1, Joystick.axis_2, Joystick.button_1, Joystick.button_2, id.ToString())));
             }
 
             return Task.CompletedTask;

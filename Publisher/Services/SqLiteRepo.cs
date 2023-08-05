@@ -40,7 +40,7 @@ namespace Publisher.Services
             {
                 //connection.Open();
 
-                string createTableQuery = "CREATE TABLE IF NOT EXISTS Joystics (ID INTEGER PRIMARY KEY AUTOINCREMENT, Time TEXT, Axis_1 TEXT, Axis_2 TEXT, Button_1 TEXT, Button_2 TEXT)";
+                string createTableQuery = "CREATE TABLE IF NOT EXISTS Joysticks (ID INTEGER PRIMARY KEY AUTOINCREMENT, Time TEXT, Axis_1 TEXT, Axis_2 TEXT, Button_1 TEXT, Button_2 TEXT)";
                 using (SQLiteCommand cmd = new SQLiteCommand(createTableQuery, connection))
                 {
                     cmd.ExecuteNonQuery();
@@ -48,33 +48,33 @@ namespace Publisher.Services
             }
         }
 
-        public void InsertJoystic(Joystic joystic)
+        public void InsertJoystick(Joystick Joystick)
         {
 
-            string insertQuery = "INSERT INTO Joystics (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
+            string insertQuery = "INSERT INTO Joysticks (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
             using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, this.sqlite_conn))
             {
-                cmd.Parameters.AddWithValue("@Time", joystic.time);
-                cmd.Parameters.AddWithValue("@Axis_1", joystic.axis_1);
-                cmd.Parameters.AddWithValue("@Axis_2", joystic.axis_2);
-                cmd.Parameters.AddWithValue("@Button_1", joystic.button_1);
-                cmd.Parameters.AddWithValue("@Button_2", joystic.button_2);
+                cmd.Parameters.AddWithValue("@Time", Joystick.time);
+                cmd.Parameters.AddWithValue("@Axis_1", Joystick.axis_1);
+                cmd.Parameters.AddWithValue("@Axis_2", Joystick.axis_2);
+                cmd.Parameters.AddWithValue("@Button_1", Joystick.button_1);
+                cmd.Parameters.AddWithValue("@Button_2", Joystick.button_2);
 
                 cmd.ExecuteNonQuery();
             }
         }
-        public List<Joystic> GetAllJoystics()
+        public List<Joystick> GetAllJoysticks()
         {
-            List<Joystic> joystics = new List<Joystic>();
+            List<Joystick> Joysticks = new List<Joystick>();
 
-            string selectQuery = "SELECT * FROM Joystics";
+            string selectQuery = "SELECT * FROM Joysticks";
             using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, this.sqlite_conn))
             {
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        Joystic joystic = new Joystic()
+                        Joystick Joystick = new Joystick()
                         {
                             id = Convert.ToInt32(reader["ID"]),
                             time = reader["Time"].ToString(),
@@ -84,12 +84,12 @@ namespace Publisher.Services
                             button_2 = reader["Button_2"].ToString()
                         };
 
-                        joystics.Add(joystic);
+                        Joysticks.Add(Joystick);
                     }
                 }
             }
 
-            return joystics;
+            return Joysticks;
         }
 
         public void InsertDataGet()
@@ -124,12 +124,12 @@ namespace Publisher.Services
             sqlite_conn.Close();
         }
 
-        public void InsertAllJoystics(IList<Joystic> joystics)
+        public void InsertAllJoysticks(IList<Joystick> Joysticks)
         {
             try
             {
-                // SQL query to insert data into the 'Joystics' table
-                string insertQuery = "INSERT INTO Joystics (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
+                // SQL query to insert data into the 'Joysticks' table
+                string insertQuery = "INSERT INTO Joysticks (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, this.sqlite_conn))
                 {
@@ -143,14 +143,14 @@ namespace Publisher.Services
                     // Execute the command multiple times in a single transaction
                     using (var transaction = this.sqlite_conn.BeginTransaction())
                     {
-                        foreach (Joystic joystic in joystics)
+                        foreach (Joystick Joystick in Joysticks)
                         {
-                            // Set parameter values inside the loop for each Joystic object
-                            cmd.Parameters["@Time"].Value = joystic.time;
-                            cmd.Parameters["@Axis_1"].Value = joystic.axis_1;
-                            cmd.Parameters["@Axis_2"].Value = joystic.axis_2;
-                            cmd.Parameters["@Button_1"].Value = joystic.button_1;
-                            cmd.Parameters["@Button_2"].Value = joystic.button_2;
+                            // Set parameter values inside the loop for each Joystick object
+                            cmd.Parameters["@Time"].Value = Joystick.time;
+                            cmd.Parameters["@Axis_1"].Value = Joystick.axis_1;
+                            cmd.Parameters["@Axis_2"].Value = Joystick.axis_2;
+                            cmd.Parameters["@Button_1"].Value = Joystick.button_1;
+                            cmd.Parameters["@Button_2"].Value = Joystick.button_2;
 
                             // Execute the SQL command to insert data into the table
                             cmd.ExecuteNonQuery();
@@ -169,17 +169,23 @@ namespace Publisher.Services
             {
             }
         }
-        public Joystic GetJoysticById(int id)
+        public Joystick GetJoystickById(int id)
         {
-            string selectQuery = "SELECT * FROM Joystics WHERE ID = @Id";
+            // SQL query to select a Joystick message by ID from the database
+            string selectQuery = "SELECT * FROM Joysticks WHERE ID = @Id";
+
+            // Using a SQLiteCommand to execute the SQL query with parameter
             using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, this.sqlite_conn))
             {
                 cmd.Parameters.AddWithValue("@Id", id);
+
+                // Using a SQLiteDataReader to read the query results
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
-                        Joystic joystic = new Joystic()
+                        // Mapping the retrieved data to a Joystick object
+                        Joystick Joystick = new Joystick()
                         {
                             id = Convert.ToInt32(reader["ID"]),
                             time = reader["Time"].ToString(),
@@ -189,18 +195,20 @@ namespace Publisher.Services
                             button_2 = reader["Button_2"].ToString()
                         };
 
-                        return joystic;
+                        // Return the constructed Joystick object
+                        return Joystick;
                     }
                 }
             }
-
+            // Return null if no Joystick message is found with the given ID
             return null;
         }
-        public void ClearAllJoystics()
+
+        public void ClearAllJoysticks()
         {
             try
             {
-                string deleteQuery = "DELETE FROM Joystics";
+                string deleteQuery = "DELETE FROM Joysticks";
                 using (SQLiteCommand cmd = new SQLiteCommand(deleteQuery, this.sqlite_conn))
                 {
                     cmd.ExecuteNonQuery();

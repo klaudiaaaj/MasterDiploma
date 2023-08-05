@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Models
 {
-    public class Joystic
+    public class Joystick
     {
         public string time { get; set; }
         public string axis_1 { get; set; }

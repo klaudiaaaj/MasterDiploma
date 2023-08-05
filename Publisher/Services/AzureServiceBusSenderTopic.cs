@@ -1,5 +1,6 @@
 ﻿using Azure.Identity;
 using Azure.Messaging.ServiceBus;
+using Confluent.Kafka;
 using Contracts.Models;
 using System.Text;
 using System.Text.Json;
@@ -8,6 +9,9 @@ namespace Publisher.Services
 {
     public class AzureServiceBusSenderTopic : IAzureServiceBusSenderTopic
     {
+        private string ConnectionString = ""; //hidden
+                                              // private readonly ServiceBusClient client;
+                                              //  private readonly ServiceBusSender sender;
         private readonly IConfiguration _configuration;
 
         public AzureServiceBusSenderTopic(IConfiguration configuration)
@@ -19,33 +23,41 @@ namespace Publisher.Services
             };
         }
 
-        public async Task Send(IList<Joystic> message)
+        public async Task Send(IList<Joystick> message)
         {
+
+            var serviceBusClient = new ServiceBusClient(_configuration["AzureConnectionStringTopic"]);
+            var sender = serviceBusClient.CreateSender(_configuration["AzureTopic"]);
             try
             {
-                var serviceBusClient = new ServiceBusClient(_configuration["AzureConnectionStringTopic"]);
-                var sender = serviceBusClient.CreateSender(_configuration["AzureTopic"]);
+                // Initialize an empty list to hold ServiceBusMessages
+                List<ServiceBusMessage> serviceBusMessages = new List<ServiceBusMessage>();
 
-                int batchSize = 1800;
-                List<Task> sendingTasks = new List<Task>();
+                // Create a new message batch using the sender
+                var serviceBusMessageBatch = await sender.CreateMessageBatchAsync();
 
-                for (int i = 0; i < message.Count(); i += batchSize)
+                // Send the current message batch to the Service Bus
+                await sender.SendMessagesAsync(serviceBusMessageBatch);
+
+                // Iterate through the input message collection (up to 10,000 messages)
+                for (int i = 0; i < message.Take(10000).Count(); i++)
                 {
-                    var batchMessages = message
-                        .Skip(i)
-                        .Take(batchSize)
-                        .Select(msg => String.Join(",", msg.time, msg.axis_1, msg.axis_2, msg.button_1, msg.button_2, msg.id.ToString()))
-                        .Select(data => new ServiceBusMessage(data))
-                        .ToList();
+                    // Construct a comma-separated message data by joining different attributes of the input message
+                    var messageBytes = Encoding.UTF8.GetBytes(String.Join(",", message[i].time, message[i].axis_1, message[i].axis_2, message[i].button_1,
+                        message[i].button_2, message[i].id.ToString()));
 
-                    // Wyślij partię wiadomości równolegle
-                    sendingTasks.Add(sender.SendMessagesAsync(batchMessages));
+                    // Try to add the current message to the existing message batch
+                    if (!serviceBusMessageBatch.TryAddMessage(new ServiceBusMessage(messageBytes)))
+                    {
+                        // If adding the message would exceed the batch size or message count, send the current batch and create a new one
+                        await sender.SendMessagesAsync(serviceBusMessageBatch);
+                        serviceBusMessageBatch.Dispose();
+                        serviceBusMessageBatch = await sender.CreateMessageBatchAsync();
+                    }
                 }
 
-                // Czekaj na zakończenie wszystkich zadań wysyłania
-                await Task.WhenAll(sendingTasks);
-
-                await serviceBusClient.DisposeAsync();
+                // Send any remaining messages in the last batch
+                await sender.SendMessagesAsync(serviceBusMessageBatch);
             }
             catch (Exception ex)
             {
@@ -53,8 +65,9 @@ namespace Publisher.Services
             }
             finally
             {
-                // Calling DisposeAsync on client types is required to ensure that network
-                // resources and other unmanaged objects are properly cleaned up.
+                // Clean up and dispose resources
+                await sender.DisposeAsync();
+                await serviceBusClient.DisposeAsync();
             }
         }
     }

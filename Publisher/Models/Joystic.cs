@@ -2,7 +2,7 @@
 
 namespace Contracts.Models
 {
-    public class Joystic
+    public class Joystick
     {
         [Optional]
         public string time { get; set; }

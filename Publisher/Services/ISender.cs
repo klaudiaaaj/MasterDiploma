@@ -5,6 +5,6 @@ namespace Publisher.Services
 {
     public interface ISender
     {
-        public Task Send(IList<Joystic> message);
+        public Task Send(IList<Joystick> message);
     }
 }

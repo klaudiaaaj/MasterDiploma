@@ -128,8 +128,8 @@
 \usepackage{xstring}
 \usepackage{ifthen}
 \usepackage{enumitem}
-
-
+\usepackage{tabularx} 
+\usepackage{nameref}
 \usepackage{ifxetex}
 
 \ifxetex
@@ -153,6 +153,8 @@
 \usepackage{geometry}
 \usepackage{subcaption}   % subfigures
 \usepackage[page]{appendix} % toc,
+\usepackage{caption}
+\usepackage{adjustbox}
 
 
 
@@ -842,7 +844,7 @@ Currently there is a huge diversity of different technologies available on the m
       \end{itemize}
    
    \end{description}
-\section{Technologies used in the scope of the experiments}
+\section{Communication patterns used in the scope of the experiments}
 \subsection{Azure Service Bus}
 Azure bus service platform-as-a-service fully managed enterprise message broker with message queues and publish-subscribe topics on the Azure Cloud. Topic and queues uses the same mechanism for the producer however their process by consumer differs in significant way.
 \begin{description}
@@ -889,53 +891,45 @@ The messages published by publisher are not directly transferred to the queue, t
 Exchanges take message and route into zero or more queues, depending on the exchange type and bindings.
 \begin{description}
 \item[\textbf{Direct exchange}] \hfill \\
-It uses the message routing key ( which is an message attribute added to the message header) to transport messages into the queue. If the message routing key does not match any binding key, the message is discard.
+It uses the message routing key (which is an message attribute added to the message header) to transport messages into the single queue. If the message routing key does not match any binding key, the message is discard.
 \item[\textbf{Default exchange}] \hfill \\
 A default exchange is an direct exchange with no name, pre-declared by the broker.  It has one particular feature that makes it useful for simple applications: every queue created is automatically bound to it using a routing key that matches the queue name.
 For instance, if a queue is declared with the name "search-indexing-online," the AMQP 0-9-1 broker will automatically bind it to the default exchange using "search-indexing-online" as the routing key (also known as the binding key). As a result, any message published to the default exchange with the routing key "search-indexing-online" will be routed to the queue "search-indexing-online." 
 \item[\textbf{Topic exchange}] \hfill \\
 It is similar to the direct exchange however topic exchange instead of using fixed routing key, it uses wildcards. The message is routed to one or many queues, basing on a matching between a message routing key and pattern. A routing pattern of “university.*.*.technology” only match routing keys where the first word is “university" and the fourth word is “technology”.
 \item[\textbf{Fanout exchange}] \hfill \\
-Fanout xxchange routes message to all the queues bounded to it, ignoring the routing key. It is ideal for the broadcast routing of messages. The exemplary usage of this exchange is the system where the same messages should be catch by the mobile application and web application or group chats where messages are distrubibuted between participants. 
+Fanout exchange routes message to all the queues bounded to it, ignoring the routing key. It is ideal for the broadcast routing of messages. The exemplary usage of this exchange is the system where the same messages should be catch by the mobile application and web application or group chats where messages are distrubibuted between participants. 
 \item[\textbf{Header exchange}] \hfill \\
 Header exchange uses routing on multiple attributes that are more easily expressed as message header than as a routing key. It is similar to the topic exchange however it uses the header attribute instead of routing key, which is here ignored. Specific argument termed “x-match” indicates whether all headers must match or only one. The headers can be build not only with string but also with types such as integers or hashes. 
 \end{description}
  \subsection{REST API}
 
 \chapter{Implementation}
-This chapter provides details about the use-case that has been implemented in order to evaluate the impact technology to the communication between microservices
+This chapter provides details about the use-case application that has been implemented in order to evaluate the impact technology to the communication between microservices. There is included the brief description of the system architecture and the functionalites which are served by each microservice in order to conduct experiments. Due to necessity of customize implementation for different experiments, information related to the exact implementation of the functionality can be found under \nameref{chap:experiments} chapter.
 
--architektura projektu
-- deployment na contenera
-
--Test setup
-- dane 
-- jakie technologie 
-The experiments are performed in 2 ways: 
-1) Using JMeter Tool
-2) Using Test Case/ Application implementation
 
 
 \section{Application}
-A system in microservice architecture has been implemented, in order to simulate a real traffic between subsystems. 
-
-In this scenario, the goal is to fetch messages producted by the producer application from cliens applications. The whole system is implemented in the .NET 6 framework and each microservice is deployed as a single container on the docker local environment.
+A system in microservice architecture has been implemented, in order to simulate a real traffic between subsystems. The goal is to fetch messages producted by the producer application from cliens applications. The whole system is implemented in the .NET 6 framework and each microservice is deployed as a single container on the docker local environment.
 \subsection{Architecture}
 The project is a microservices-based application developed in C\#, where each microservice is implemented as a separate ASP.NET Core application using .NET 6. The application is designed to provide a scalable and modular architecture, allowing independent development and deployment of each microservice. 
 
-Containers ordinarily get their own private network that is separate to the host stack. However in order to to use inter-container networking to perform communication between them, containers are allowed to share host's network stack. It means that they are allowed to access the host machine's localhost instead  of the container's host itself. 
+Containers ordinarily get their own private network that is separate to the host stack. However in order to use inter-container networking to perform communication between them, containers are allowed to share host's network stack. It means that they are allowed to access the host machine's localhost instead  of the container's host itself. 
  
 The figure BLABLA provides an overview of data flow in whole the system. Once the data is collected and processed by the publisher application, it is resend to the particular data stores. Then the data is catch by client applications and send via websocket to the virtual machine over the websocket. 
 
 Whole system is consisted of.......
 
-\subsection{Producer Application}
+\subsection{Producer API}
 Producer application is a microservice which is provided with a set of data.  In reference to the microservices principles, there is no option to share common database within subsystems. The primary objective of the application is to process and services data efficiently with clients, using RESTful and asynchronous communication methods.  Producer dispatches data to designated message brokers: RabbitMq broker, Azure Service Broker and saves it in the local database.
 When RESTClient microservice request access to previously processed data Producer Application retrieving  data from the database and delivers it synchronously to the clients in response to HTTP requests.
 The producer functionalities are invoked by the HTTP Request to following endpoints: 
 \begin{description}[style=nextline, font=\normalfont\textbf]
-  \item [HTTP POST] \textnormal{\texttt{host/api/publisher/produce/rabbitMq}}
-  Following endpoint while invoked, starts the process of publishing set of data to the RabbitMq Broker.
+  \item [HTTP POST] \textnormal{\texttt{host/api/publisher/produce/rabbitMQ/direct}}
+  Following endpoint while invoked, starts the process of publishing set of data to the RabbitMQ direct exchange with pre-configured binding.
+  \item [HTTP POST] \textnormal{\texttt{host/api/publisher/produce/rabbitMQ/fanout}}
+  Following endpoint while invoked, starts the process of publishing set of data to the RabbitMQ fanout exchange with pre-configured bindings.
+
 
   \item [HTTP POST \texttt{host/api/publisher/produce/azureServiceBusQueue}]
   Following endpoint while invoked, starts the process of publishing set of data to the Azure Service Bus Queue.
@@ -944,71 +938,93 @@ The producer functionalities are invoked by the HTTP Request to following endpoi
   Following endpoint while invoked, starts the process of publishing set of data to the Azure Service Bus Topic.
 
   \item [HTTP POST \texttt{host/api/publisher/produce/database}]
-  Following endpoint while invoked, starts saving data into the local database. The aim of the process is related to synchronous REST communication. Due to the fact that with REST, data by client applications is received directly from the manufacturer's application, the manufacturer must have a place where the data will be stored until the client application requests it.
+  Following endpoint while invoked, starts saving data into the local database. The aim of the process is related to synchronous REST communication. Due to the fact that with REST, data by client applications is received directly from the Producer API, the Producer API must have a place where the data will be stored until the REST Client API requests it.
 \end{description}
-Producer application has separate controller for REST Communication with REST Client microservice. 
+Producer application has separate controller for REST Communication with REST Client API. 
 \begin{description}[style=nextline, font=\normalfont\textbf]
   \item [HTTP GET \texttt{host/api/publisher/RESTDataProvider/GetById/{id}}]
-  RestClient microservice asks the Producer to get single data by calling the following endpoint, including the objectId in the request params. The Producer retrieves the object from the database and returns it in the response to the request.
+  REST Client API asks the Producer to get single data by calling the following endpoint, including the objectId in the request params. The Producer retrieves the object from the database and returns it in the response to the request.
 
   \item [HTTP GET \texttt{host/api/publisher/RESTDataProvider/GetAll}]
-  RestClient microservice requests the Producer to get all produced data by calling the following endpoint. The Producer retrieves all the objects from the database and returns them as a list in the response to the request.
+  REST Client API requests the Producer to get all produced data by calling the following endpoint. The Producer retrieves all the objects from the database and returns them as a list in the response to the request.
 \end{description}
 
-Figure no [] provides the architecture schema of Publisher Web API. 
+Figure no [] provides the architecture schema of Producer API. The Producer API is deployed as a solitary container within the Docker localhost environment.
 
-\subsection{REST Client Microservice}
-Rest client API is an application is built on ASP.NET Core technology, to retrieve data from the Producer API using the HTTP protocol and REST API principles.
-The application serves as a data consumer and interacts with Producer API to obtain required data in synchronous manner. Rest Client API sends HTTP GET requests directly to the Producer API. Upon a successful response from the Producer API, the application receives the requested data.  In case of any error during the API call error, application handles the exception. 
+\subsection{REST Client API}
+Rest client API is an application is built on ASP.NET Core technology, to retrieve data from the Producer API over the HTTP protocol using REST API principles.
+The application serves as a data consumer and interacts with Producer API to obtain required data in synchronous manner. Rest Client API sends HTTP GET requests directly to the Producer API. Upon a successful response from the Producer API, the application receives the requested data.  In case of any error during the API call, application handles the exception and returns it with a suitable status code. 
 
-The Rest Client API has been designed to also establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided 2 endpoints:
+For the experiment no 2. ref[]. has been deployed 5 instances of REST Client API, as seperates docker containers.
+
+The Rest Client API has been designed to with the intention of enabling communication with external clients using the HTTP protocol. To obtain the interaction, the following endpoints have been made:
 \begin{description}[style=nextline, font=\normalfont\textbf]
-  \item [HTTP GET \texttt{host/api/RestClient/all}]
-  It initializes the process of obtaining all produced data from Producer API. As a response, application returns list of messages.
-   \item [HTTP GET \texttt{host/api/RestClient/{id}}]
+\item [HTTP GET \texttt{host/api/RestClient/{id}}]
      It initializes the process of obtaining single  data from Producer API. As a response application returns single message.
+\item [HTTP GET \texttt{host/api/RestClient/all}]
+  It initializes the process of obtaining all produced data from Producer API. As a response, application returns list of messages.
 \end{description}
-\subsection{RabbitMQ Consumer}
+ The REST Client API is deployed as a solitary container within the Docker localhost environment.
+\subsection{RabbitMQ Consumer APIs}
 RabbitMQ Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using RabbitMQ message broker over the AMQP protocol. 
 
 The application serves as consumer application, which is representation for the asynchronous communication. It does not interact with Producer API directly, but rather they communicate via an intermediary known as message broker. RabbitMQ message broker is deployed as a separate container on the local environment, using Docker image for RabbitMQ. The RabbitMQ Docker image is based on the official RabbitMQ image available on Docker Hub, and it is created using a Dockerfile. The Dockerfile defines the instructions to build the image, including the base image, environment setup, and any additional configurations needed for RabbitMQ.
+
 Once the RabbitMQ Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to pick it up.  
-
-The  RabbitMQ Client API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
-following endpoints: 
-
+For the purpose of conducting two different experiments with the use of the RabbitMQ message broker, two versions of the RabbitMQ Consumer API application were created. The versions differ in the type of exchange they refer to.
+\subsubsection{RabbitMQ Concumer Direct Exchange API}\
+For the experiment no. 1 [ref] where one consumer gets data, the RabbitMQ Consumer API collects data directly from direct exchange.
+Referring to the definitions presented in ref [], direct exchange will work perfectly due to the fact that it sends data directly to one queue specified in bindings.
+The RabbitMQ Consumer Direct Exchange API has been designed to with the intention of enabling communication with external clients using the HTTP protocol. To obtain the interaction, the following endpoints have been made;
 \begin{description}[style=nextline, font=\normalfont\textbf]
-\item [HTTP GET \texttt{host/api/rabbitMQConsumer/single}]
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/direct/single}]
   It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
-\item [HTTP GET \texttt{host/api/rabbitMQConsumer/all}]
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/direct/all}]
 It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
 \end{description}
-\subsection{Azure Service Bus Queue Consumer}
-Azure Service Bus Queue Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker from queues over the AMQP protocol. 
 
-Azure Service Bus Consumer API substitute of RabbitMQ Consumer API in the context of messaging systems. It also collects data from queue, using pattern First-in-First-out however Azure Service Bus is an cloud-base message broker as opposed to the traditional local deployment of RabbitMQ. Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured queue binding.
+\subsubsection{RabbitMQ Consumer Fanout Exchange API}
+For the experiment no. 2 [ref] where multiple consumers are gets data simultaneously, the RabbitMQ consumer API, collects data from Fanout Exchange. 
+Since RabbitMQ only supports queuing logic, messages are enqueued and dequeued in the First-In First-Out manner. For the multiple consumers scenario, there is an need of enqueue messages to the multiple queues, each for one consumer. The fanout exchange is suitable in this case, because It routes messages to all of the queues that are bound to it. 
 
-The Azure Service Bus Consumer API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
+The RabbitMQ Consumer Fanout Exchange API has been designed to with the intention of enabling communication with external clients using the HTTP protocol. To obtain the interaction, the following endpoints have been made:
+\begin{description}[style=nextline, font=\normalfont\textbf]
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/fanout/single}]
+  It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
+\item [HTTP GET \texttt{host/api/rabbitMQConsumer/fanout/all}]
+It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
+\end{description}
+
+
+\subsection{Azure Service Bus APIs}
+Azure Service Bus Queue Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker over the AMQP protocol. 
+
+Referring to the possibilities offered by Azure, and the lack of recommendations related to the selection of the appropriate solution by Microsoft, the process of collecting data from both queues and topics has been implemented. Each pattern is implemented by the seperate microservice.
+\subsubsection{Azure Service Bus Queue API}
+
+Azure Service Bus Queue Consumer API substitute of RabbitMQ Consumer API in the context of messaging systems. It also collects data from queue, using pattern First-in-First-out however Azure Service Bus is an cloud-base message broker as opposed to the traditional local deployment of RabbitMQ. Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured queue binding.
+
+Following API is used in the experiment no. 1 ref[]. In the reference to the definitions provided in ref[], the queue is often used to point-to-point communication, because of the mentioned first-in first-out manner. It is suitable for single consumer scenario. 
+
+The Azure Service Bus Queue Consumer API has been designed to with the intention of enabling communication with external clients using the HTTP protocol. To obtain the interaction, the following endpoints have been made
 following endpoints: 
 \begin{description}[style=nextline, font=\normalfont\textbf]
 \item [HTTP GET \texttt{host/api/asbConsumer/queue/single}]
   It initializes the process of picking up single message from Azure Service Bus broker. As a response application returns single message.
 \item [HTTP GET \texttt{host/api/asbConsumer/queue/single}]
 It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
-\item [HTTP GET \texttt{host/api/asbConsumer/topic/single}]
-  It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
-\item [HTTP GET \texttt{host/api/asbConsumer/topic/all}]
-It initializes the process of picking up all available messages from RabbitMQ broker. As a response, application returns list of messages.
+
 \end{description}
 
-\subsection{Azure Service Bus Topic Consumer}
-Referring to the possibilities offered by Azure, and the lack of recommendations related to the selection of the appropriate solution by Microsoft, the process of collecting data from both queues and topics has been implemented. 
-Azure Service Bus Topic Consumer API is an application built on ASP.NET Core technology, to retrieve data produced by Producer Api using Azure Service Bus cloud message broker from Topic over the AMQP protocol. 
+\subsubsection{Azure Service Bus Topic API}
+In Experiment No. 2, the following API is utilized: ref[].  
+The definitions refereed in  ref[], indicate that the topics are appropriate for multi-consumer scenario. This is because a topic facilitates the sharing of messages with all subscribers who are listeing to the particular topic.
 
-Once the Azure Service Bus Consumer API is in the need of data, it makes call to the message broker with pre-configured binding to proper topic to pick it up. For the purpose of experiment, has been implemented single subscription to a topic. 
+ To implement this functionality, five docker containers of Azure Service Bus Topic API have been deployed. Each container differs from other based on the specific subscription to which it is connected in the Azure Service Bus Topic.
+ 
+When the Azure Service Bus Consumer API requires data, it initializes a call to the message broker under implemented subscription. This subscription has a pre-configured binding to the appropriate topic, allowing the API to retrieve the data.
 
-The Azure Service Bus Consumer API has been designed to establish communication with external clients over the HTTP protocol. To obtain the interaction, has been provided
-following endpoints: 
+The Azure Service Bus Consumer API has been designed to with the intention of enabling communication with external clients using the HTTP protocol. To obtain the interaction, the following endpoints have been made: 
 \begin{description}[style=nextline, font=\normalfont\textbf]
 \item [HTTP GET \texttt{host/api/asbConsumer/topic/single}]
   It initializes the process of picking up single message from RabbitMQ broker. As a response application returns single message.
@@ -1017,37 +1033,217 @@ It initializes the process of picking up all available messages from RabbitMQ br
 \end{description}
 \subsection{Architecture}
 
-\chapter{Experiments}
+\chapter{Experiments} 
+\label{chap:experiments}
+
 The experiment section presents the description, exemplary implementation and the results of survey in examination various types of scenarios in communication between microservices. 
  Each experiment is aimed to found the advantages and disadvantages of using the selected communication pattern for a specific use case.
+ \section{Metrics taken into account during the analysis}
+
+Metrics for following experiment has been collected using The Apache JMeter™ tool. This is an open software toll, based on Java, to  perform load and functional test. It helps to simulate multiple scenarios such as heavy load on a server to analyse overall performance under different load conditions. 
+
+In following master thesis experiments, it helped to get insides of request latency, load time, throughput, minimum and maximum of response, count of erros, size of objects and general experiment time. Thanks to that, there was possibility to analyse the results in clear way. It has generated  diagrams which show in a transparent way the data acquisition process. 
+
+\begin{itemize}
+    \item \textbf{Latency} \\
+    Latency refers to the time difference between when a request is sent and the moment the response begins to be received.
+
+    \item \textbf{Response time} \\
+    Response time signifies the time difference between when a request is sent and when the complete response is received.
+
+    \item \textbf{Throughput} \\
+    Throughput denotes the total count of requests that an application can process during a specified time frame. A higher throughput value indicates better performance and system capacity to handle multiple requests concurrently. In the metrics below, throughput is measured within one second.
+
+    \item \textbf{Error rate} \\
+    The error rate represents the number of errors that occurred during the experiment.
+\end{itemize}
+
 \section{ First experiment}
 
-"The client application wants to use the data already processed by the producer application. The data has been placed in various resources depending on the technology that microservices communicate with each other. The producer application does not need to get information about whether the data has been received by the client. The customer receives the data when he needs it, so that he does not store it in his system unnecessarily" 
+"The client application wants to use the data already processed by the producer application.The data produced by the producer application is placed in various resources, depending on the communication technology (REST, RabbitMQ, Azure Service Bus) that microservices use. The producer application does not need to get information about whether the data has been received by the client. The customer receives the data when he needs it, so that he does not store it in his system unnecessarily. Data produced by producer has single consumer." 
 
-The experiment was divided into two variants. 
-Variant A - The client receives the data individually, one request for each query
-Variant B - The customer receives all the data available to him in the system with one query
-
-\subsubsection{One data per request}
-\subsubsection{Configuration}
-
-\paragraph{RabbitMQ}
-For the project purpose 
-\subparagraph{Rest API}
-\subparagraph{Azure Service Bus}
-\subparagraph{RabbitMq}
-\subparagraph{Rest API}
-%\chapter{[Subject of the thesis]}
-%
-%\begin{itemize}
-%\item solution to the problem proposed by the author of the thesis
-%\item theoretical analysis of proposed solutions
-%\item rationale of applied methods, algorithms, and tools
-%\end{itemize}
+\subsection{Key values of the scenario}
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Asynchronous:} The communication between the producer application and the client application is asynchronous. The client does not wait for the data to be immediately available upon request but retrieves it at a later time.
+    
+    \item \textbf{Data Retrieval:} The client application retrieves data that has already been processed by the producer application. This retrieval is initiated by the client's demand. 
+    
+    \item \textbf{Decentralized Data Placement:} The data produced by the producer application is placed in various resources, depending on the communication technology (REST, RabbitMQ, Azure Service Bus) that microservices use. This implies a decentralized approach to data storage and placement.
+    
+    \item \textbf{Unidirectional Communication:} The data flows from the producer to the consumer (client) in a unidirectional manner for Azure Service bus and RabbitMQ. The producer does not need to know whether the data has been received by the client.
+    
+    \item \textbf{On-Demand Data Consumption:} The client receives the data when it needs it, ensuring that it does not store unnecessary data locally. This efficient data consumption approach minimizes storage overhead on the client side.
+    
+    \item \textbf{Single Consumer:} The data produced by the producer has a single consumer, which is the client application. This indicates a one-to-one relationship between the producer and the consumer for the specific dataset being retrieved.
+\end{enumerate}
 
 
-% TODO
-\chapter{Experiments}
+The experiment was divided into two variants:
+\begin{itemize}
+    \item The client receives the data individually, one request for each query,
+    \item The customer receives all the data available to him in the system with one query;
+    \end{itemize}
+For each variant has been performed experiments on different amount of object: 
+\begin{itemize}
+    \item 1000 objects, 
+    \item 300 000 objects;
+    \end{itemize}
+For each variant has been performed experiments on different size of object: 
+\begin{itemize}
+    \item 48 bytes per object,
+    \item -----;
+    \end{itemize}
+
+\subsection{Experiment technical arrangement}
+\subsubsection{Publisher}
+\label{subsec:publisherfirst}
+\begin{itemize}
+\item \textbf{Azure Service Bus Queue Publisher}\\
+    Configuring the function for sending data to the Azure Service Bus was a highly intricate process. The focus while implementing the function was put on expeditiously sending considerable data packets to the Azure Service Bus. 
+    
+    Figure~\ref{fig:azurepublisherqueuesnippet} illustrates a code snippet exemplifying the message transmission to the Azure Service Bus. The transmission procedure was optimized by structuring messages into batches that conform to predefined size constraints. The utmost size of each message batch is constrained to 256 KB, and exceeding this size results in batch rejection. Prescribed maximum batch size is 256 KB, however the size of message is calculated taking into account not only the message body size, but also the headers and other message metadata.
+    ServiceBusClient and ServiceBusSender classes are created on the provided connection string and queue name respectively. The content of the message is a UTF-8 encoded string created by joining various properties of the \texttt{joystic} object, resulting in a size of 47 bytes. Function 'TryAddMessage', attempts to add a message to the batch, ensuring that the size of the batch does not exceed its maximum. Otherwise, function does not add the message to the batch, it sends the current batch to Azure Service Bus, disposes it , recreates new one and finally adds message to recent batch. The process is repeated in each iteration while exceeding the end of list of objects waiting to be send. 
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{azurepublisherqueuesnippet.png}
+        \caption{Code excerpt presenting the process of sending messages to the queue on the Azure Service Bus}
+        \label{fig:azurepublisherqueuesnippet}
+    \end{figure}
+
+    \item \textbf{RabbitMQ Publisher} \\
+    The process of sending messages to RabbitMQ is straightforward. The code snippet shown in Figure~\ref{fig:rabbitsnippet} demonstrates how messages are sent to direct exchange on RabbitMQ message broker. 
+    A connection to a RabbitMQ server is established using the \texttt{\_connectionFactory} object, which is an instance of a connection factory class. A communication channel is created using the \texttt{connection.CreateModel()} method. Channels are used to interact with RabbitMQ queues.  The content of the message is a UTF-8 encoded string created by joining various properties of the \texttt{joystic} object, resulting in a size of 47 bytes. Each message, in contrast to Azure Service Bus, is published separately to the specified exchange (default exchange) with the routing key set to \texttt{\_queueName}. 
+
+\begin{figure}[ht]
+    \centering
+    % Include your code snippet figure here
+    \includegraphics[width=0.8\textwidth]{rabbitmqsnippet.png}
+    \caption{Code excerpt presenting the process of saving all processed data into database}
+    \label{fig:rabbitsnippet}
+\end{figure}
+
+
+\item \textbf{REST Publisher}\\
+   In the case of implementing the data communication functionality using REST, the data is saved to the database. The Figure~\ref{fig:dbpersist} illustrates the essential steps of saving data to the database. The code begins by constructing an SQL query template for inserting data into the 'Joystics' table. The query employs parameter placeholders for each attribute, ensuring secure and parameterized database interactions to prevent SQL injection vulnerabilities. Within the loop, the code iterates through each `Joystic` object extracted from the REST communication. For each `Joystic` object, the code sets the corresponding parameter values with the attributes of the object. Upon setting the parameter values, the code executes the SQL command using `ExecuteNonQuery()`. This action inserts the data from the `Joystic` object into the database as a new record.It is noteworthy that the entire operation occurs within a transaction, as indicated by the `BeginTransaction()` and `Commit()` methods. This transactional approach ensures data integrity and consistency; either all records are inserted successfully, or none are inserted in the case of an error.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{restsnippet.png}
+        \caption{Code excerpt presenting the process of saving all processed data into database}
+        \label{fig:restsnippet}
+    \end{figure}
+    
+
+\end{itemize}
+\subsubsection{RabbitMQ Direct Client API}
+\paragraph{Retrieving Individual Messages in a Single Request}~\\
+The process of consuming a single message from a direct exchange using the RabbitMQ library is depicted in Figure~\ref{fig:rabbitmqconsumedirectsinglesnippet}. The procedure begins with the instantiation of a connection factory object. This encapsulates the necessary details for establishing connections to the messaging system. Upon establishing a connection, a communication channel is established. Within this channel, a queue is declared, specifying attributes such as queue name, durability, exclusivity, and auto-deletion.
+
+To facilitate message retrieval, an event-based consumer is created on the communication channel. The subsequent code segment endeavors to fetch messages using the \texttt{BasicGet} method, incorporating parameters for queue name and auto-acknowledgment. Auto-acknowledgment signifies automatic marking of messages as received. When a message is retrieved, its byte-array body is transformed into a coherent string representation using UTF-8 encoding. This transformed message body is then returned in the response to the request.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{rabbitmqconsumedirectsinglesnippet.png}
+        \caption{Code excerpt presenting the process of consuming single message in one request from RabbitMQ message broker}
+        \label{fig:rabbitmqconsumedirectsinglesnippet}
+    \end{figure}
+    
+\paragraph{Retrieving All Messages in a Single Request}~\\
+The pivotal steps involved in consuming messages from a direct exchange using the RabbitMQ library are outlined in Figure~\ref{fig:rabbitmqconsumedirectsinglesnippet }. Analogous to the single message retrieval approach, the code initiation involves the instantiation of a connection factory and channel objects. Subsequently, a queue is declared with specified attributes.
+
+To accommodate the retrieved message data, a collection named \texttt{dataList} is initialized. The code employs an iterative loop mechanism to continuously retrieve messages from the designated queue. During each iteration, the \texttt{BasicGet} method is employed to retrieve a message, and an auto-acknowledgment mechanism is invoked. Upon successfully obtaining a message, its byte-array body is transformed into a coherent string using UTF-8 encoding, and subsequently added to the \texttt{dataList} collection.
+
+When no messages are retrieved, the loop ends, acknowledging the absence of additional data in the queue. The content of the \texttt{dataList} collection is returned in the response to the request.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{rabbitmqconsumedirectsallsnippet.png}
+        \caption{Code excerpt presenting the process of consuming all messages in a single request from RabbitMQ message broker}
+        \label{fig:rabbitmqconsumedirectsallsnippet}
+    \end{figure}
+    
+\subsubsection{REST Client API}
+\paragraph{Retrieving Individual Messages in a Single Request}~\\
+
+The consumption of a solitary message from a producer application, employing the REST communication pattern is illustrated in Figure~\ref{fig:restclientbysinglesnippet}
+ An asynchronous HTTP GET request is sent to an external Producer API endpoint to retrieve single message. The request URL is constructed using the provided message "id" parameter.
+Figure~\ref{fig:restproducerbysinglesnippet} presents how producer catches the request and responses with taken message from database by specific id. 
+Client after receive the response, reads the content of the response as a string and if the response is successful, the retrieved data is returned to requestor. 
+       \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{restclientbysinglesnippet.png}
+        \caption{Code excerpt presenting the process of invoking the call to the Publisher API to receive single message.}
+        \label{fig:restclientbysinglesnippet}
+    \end{figure}
+\paragraph{Retrieving All Messages in a Single Request}~\\
+The process of consuming a single message from a producer application using the REST communication pattern in Figure~\ref{fig:dbpersist}.
+An asynchronous HTTP GET request is sent to an external Producer API endpoint to retrieve all data.
+
+       \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{restclientallsnippet.png}
+        \caption{Code excerpt presenting the process of invoking the call to the Publisher API to receive list of all messages.}
+        \label{fig:restclientallsnippet}
+    \end{figure}
+Figure~\ref{fig:dbpersist} presents how producer catches the request and responses with taken messages from the database. 
+Client after receive the response, reads the content of the response as a string and if the response is successful, the retrieved data is returned to requestor. 
+  \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{restproducerallsnippet.png}
+        \caption{Code excerpt presenting the process of getting all messages from database.}
+        \label{fig:restproducerallsnippet}
+    \end{figure}
+\subsubsection{Azure Service Bus Client API}
+
+\paragraph{Retrieving Individual Messages in a Single Request}~\\
+\paragraph{Retrieving All Messages in a Single Request}~\\
+
+\subsection{Experiments Results}
+\subsubsection{Publisher}
+The following table [please add reference to exp1publisermetrics ] presents the results collected while sending messages to data stores, respect for the communication patterns.In order to get more insides from the experiment, the data was collected during the process of transferring 300,000 data.
+
+\begin{table}[h]
+    \centering
+    \caption{Performance Metrics}
+    \label{tab:metrics}
+    \begin{adjustbox}{width=\textwidth}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{Technology} & \textbf{Latency (ms)} & \textbf{Response time (ms)} & \textbf{Error rate} & \textbf{Throughput} \\
+        \hline
+        Rest & 2900 & 2900 & 0 & 0.34483 \\
+        \hline
+        Azure Service Bus Queue & 237535 & 237535 & 0 &0.00421 \\
+        \hline
+        RabbitMq Queue Direct & 10510 & 10510  & 0 & 0.09515 \\
+        \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+The process of save data to the database for the REST Communication pattern, demonstrates the lowest latency and response time, with values of 2900 ms. Sending the data to the message brokers, for both Azure Service Bus Queue and RabbitMq Queue Direct exhibit notably higher latency and response time, measuring 237535 ms and 10510 ms, respectively.
+The throughput, measured in requests per unit time, presents an interesting perspective. REST communication boasts a throughput of 0.34483 requests per unit time, which is notably higher than the message broker technologies. Azure Service Bus Queue and RabbitMq Queue Direct exhibit lower throughput values of 0.00421 and 0.09515 requests per unit time, respectively.
+RabbitMQ proves significantly faster, accounting for only 4.425\% of the total execution time compared to message transmitting in the Azure Service Bus queue. Furthermore, RabbitMQ exhibits 95.575\% higher latency when compared to data transmission in the Azure Service Bus queue.
+ This difference could  eventuate from many restrictions related to data transfer that had to be taken into account during the implementation a solution for Azure Service Bus. All conditional statements had to be executed in each iteration for 300000 objects, which could remarkably slow down this process.
+ 
+All three technologies showcase a 0\% error rate, indicating robust and successful data transmission in each case.
+
+For the selected scenario, the least efficient publishing messages to Azure Service Bus. However due to the fact that the data can be received by the client, also after a long time, in following scenario, publishing process may not slow down the system. 
+
+\section{Second experiment}
+\subsection{Experiment technical arrangement}
+\subsubsection{Publisher}
+    
+\begin{itemize}
+\item \textbf{Azure Service Bus Topic Publisher}\\
+In the context of handling multiple consumers, the Azure Service Bus topics were employed to facilitate the required functionality. The underlying process described under the \ref{subsec:publisherfirst} section, responsible for sending messages to an Azure Service Bus queue remains largely analogous, however, in this case the ServiceBusClient object is instantiated with respect to the designated topic name.
+The code excerpt responsible for transmitting messages to the Azure Service Bus Topic is illustrated on the Figure ~\ref{fig:azurepublishertopicsnippet}
+
+   \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{azurepublishertopicsnippet.png}
+        \caption{Code excerpt presenting the process of sending messages to the specified topic on the Azure Service Bus}
+        \label{fig:azurepublishertopicsnippet}
+    \end{figure}
+\end{itemize}
 %
 %This chapter presents the experiments. It is a crucial part of the thesis and has to dominate in the thesis. 
 %The experiments and their analysis should be done in the way commonly accepted in the scientific community (eg. benchmark datasets, cross validation of elaborated results, reproducibility and replicability of tests etc).

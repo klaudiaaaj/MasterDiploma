@@ -15,7 +15,7 @@
 //        private string _queueName;
 //        private readonly ILogger<RabbitMqSubscriberService> _logger;
 //        private readonly RosContractor ros;
-//        private readonly TaskCompletionSource<Joystic> _completionSource = new TaskCompletionSource<Joystic>();
+//        private readonly TaskCompletionSource<Joystick> _completionSource = new TaskCompletionSource<Joystick>();
 //        private ManualResetEvent _resetEvent = new ManualResetEvent(false);
 
 //        public RabbitMqSubscriberService(IConfiguration configuration, ILogger<RabbitMqSubscriberService> logger)
@@ -38,7 +38,7 @@
 //            bool durable = false;
 //            bool exclusive = false;
 //            bool autoDelete = false;
-//            _queueName = "joystic-queue";
+//            _queueName = "Joystick-queue";
 //            _channel.QueueDeclare(_queueName, durable, exclusive, autoDelete, null);
 //            Console.WriteLine("--> Listenting on the Message Bus...");
 
@@ -48,19 +48,19 @@
 //        public async Task<string?> ExecuteAsyncSingle()
 //        {
 //            var consumer = new EventingBasicConsumer(_channel);
-//            string? joystic = string.Empty;
+//            string? Joystick = string.Empty;
 //            consumer.Received += (model, eventArgs) =>
 //            {
 //                var body = eventArgs.Body.ToArray();
 //                var message = Encoding.UTF8.GetString(body);
-//                joystic = message;
+//                Joystick = message;
 //                Console.WriteLine($"Product message received: {message}");
 //            };
 //            //read the message
 //           _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
 //            _connection = null;
 
-//            return joystic;
+//            return Joystick;
 //        }
 
 //        private void RabbitMQ_ConnectionShitdown(object sender, ShutdownEventArgs e)

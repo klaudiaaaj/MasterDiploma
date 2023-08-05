@@ -1,6 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Contracts.Models;
 using System.Text;
+using static IronPython.Modules.PythonIterTools;
 
 namespace Publisher.Services
 {
@@ -22,43 +23,38 @@ namespace Publisher.Services
             sender = client.CreateSender(configuration["Azure_QueueName"]);
         }
 
-        public async Task Send(IList<Joystic> message)
+        public async Task Send(IList<Joystick> message)
         {
             try
             {
-                int maxBatchSizeBytes = 200 * 1024; //Defines the maximum size of a message batch in bytes(equivalent to 256 KB)
+                // Initialize an empty list to hold ServiceBusMessages
                 List<ServiceBusMessage> serviceBusMessages = new List<ServiceBusMessage>();
-                long currentBatchSizeBytes = 0; // Keeps track of the accumulated size of messages within the current batch
 
-                // Iterating through the input message collection
-                for (int i = 0; i < message.Count; i++)
+                // Create a new message batch using the sender
+                var serviceBusMessageBatch = await sender.CreateMessageBatchAsync();
+
+                // Send the current message batch to the Service Bus
+                await sender.SendMessagesAsync(serviceBusMessageBatch);
+
+                // Iterate through the input message collection (up to 10,000 messages)
+                for (int i = 0; i < message.Take(10000).Count(); i++)
                 {
-                    // Constructs a comma-separated message data by joining different attributes of the input message
-                    var messageData = String.Join(",", message[i].time, message[i].axis_1, message[i].axis_2, message[i].button_1, 
-                        message[i].button_2, message[i].id.ToString());
-                    var messageBytes = Encoding.UTF8.GetBytes(messageData);// Converts the message data into bytes using the UTF-8 encoding
-                    var serviceBusMessage = new ServiceBusMessage(messageBytes); // Creates a new ServiceBusMessage instance using the message bytes
+                    // Construct a comma-separated message data by joining different attributes of the input message
+                    var messageBytes = Encoding.UTF8.GetBytes(String.Join(",", message[i].time, message[i].axis_1, message[i].axis_2, message[i].button_1,
+                        message[i].button_2, message[i].id.ToString()));
 
-                    long messageSizeBytes = messageBytes.Length; // Calculates the size of the current message in bytes
-
-                    // Checks if adding the current message to the batch would exceed the maximum batch size or the maximum message count
-                    if (currentBatchSizeBytes + messageSizeBytes > maxBatchSizeBytes || serviceBusMessages.Count == 1800)
-                    {  
-                        // Sends the accumulated batch of messages to the Service Bus                    
-                        await sender.SendMessagesAsync(serviceBusMessages);
-                        serviceBusMessages.Clear(); // Clears the batch list
-                        currentBatchSizeBytes = 0; // Resets the batch size tracker
+                    // Try to add the current message to the existing message batch
+                    if (!serviceBusMessageBatch.TryAddMessage(new ServiceBusMessage(messageBytes)))
+                    {
+                        // If adding the message would exceed the batch size or message count, send the current batch and create a new one
+                        await sender.SendMessagesAsync(serviceBusMessageBatch);
+                        serviceBusMessageBatch.Dispose();
+                        serviceBusMessageBatch = await sender.CreateMessageBatchAsync();
                     }
-                    // Adds the current message to the batch and updates the batch size
-                    serviceBusMessages.Add(serviceBusMessage);
-                    currentBatchSizeBytes += messageSizeBytes;
                 }
 
-                // Sends any remaining messages in the batch
-                if (serviceBusMessages.Count > 0)
-                {
-                    await sender.SendMessagesAsync(serviceBusMessages);
-                }
+                // Send any remaining messages in the last batch
+                await sender.SendMessagesAsync(serviceBusMessageBatch);
             }
             catch (Exception ex)
             {
@@ -66,10 +62,10 @@ namespace Publisher.Services
             }
             finally
             {
+                // Clean up and dispose resources
                 await sender.DisposeAsync();
                 await client.DisposeAsync();
             }
-
         }
     }
 }

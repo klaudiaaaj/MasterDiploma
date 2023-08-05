@@ -7,7 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Publisher/Publisher.csproj", "Publisher/"]
-COPY ["Publisher/joystick_data.csv", "/app/"]
+COPY ["Publisher/Joystickk_data.csv", "/app/"]
 RUN dotnet restore "Publisher/Publisher.csproj"
 COPY . .
 WORKDIR "/src/Publisher"			

@@ -15,7 +15,7 @@ namespace Publisher.Controllers
         public readonly IAzureServiceBusSenderTopic azureServiceBusSenderTopic;
         public readonly IDataProducerService dataProducerService;
         public readonly ISqLiteRepo sqLiteRepo;
-        public readonly IList<Joystic> iJoysticList;
+        public readonly IList<Joystick> iJoystickList;
 
         public CommunicationController(IRabbitMqSenderDirect rabbitMqSender, IKaffkaSender kaffkaSender, IAzureServiceBusSender azureServiceBusSender, IDataProducerService dataProducerService, ISqLiteRepo sqLiteRepo, IAzureServiceBusSenderTopic azureServiceBusSenderTopic, IRabbitMqSenderFanout rabbitMqSenderFanout)
         {
@@ -26,7 +26,7 @@ namespace Publisher.Controllers
             this.sqLiteRepo = sqLiteRepo;
             this.azureServiceBusSenderTopic = azureServiceBusSenderTopic;
             this.rabbitMqSenderFanout = rabbitMqSenderFanout;
-            iJoysticList = dataProducerService.GetJoysticData();
+            iJoystickList = dataProducerService.GetJoystickData();
         }
         [HttpGet("produce")]
         public Task ProduceData()
@@ -37,7 +37,7 @@ namespace Publisher.Controllers
         [HttpPost("rabbitMq/direct")]
         public Task SendDataByRabbitMqDirect()
         {
-            var task = rabbitMqSenderDirect.Send(iJoysticList);
+            var task = rabbitMqSenderDirect.Send(iJoystickList);
             task.Wait();
 
             return Task.CompletedTask;
@@ -46,7 +46,7 @@ namespace Publisher.Controllers
         [HttpPost("rabbitMq/fanout")]
         public Task SendDataByRabbitMqFanout()
         {
-            var task = rabbitMqSenderFanout.Send(iJoysticList);
+            var task = rabbitMqSenderFanout.Send(iJoystickList);
             task.Wait();
             return Task.CompletedTask;
         }
@@ -54,7 +54,7 @@ namespace Publisher.Controllers
         [HttpPost("azureServiceBusQueue")]
         public Task SendDataByAzureServiceBus()
         {
-            var task = azureServiceBusSenderQueue.Send(iJoysticList);
+            var task = azureServiceBusSenderQueue.Send(iJoystickList);
             task.Wait();
 
             return Task.CompletedTask;
@@ -64,7 +64,7 @@ namespace Publisher.Controllers
         public Task SendDataByAzureServiceBusTopic()
         {
 
-            var task = azureServiceBusSenderTopic.Send(iJoysticList);
+            var task = azureServiceBusSenderTopic.Send(iJoystickList);
             task.Wait();
 
             return Task.CompletedTask;
@@ -73,9 +73,9 @@ namespace Publisher.Controllers
         [HttpPost("database")]
         public Task SendBtRestToDatabase()
         {
-            if (iJoysticList.Count > 0)
+            if (iJoystickList.Count > 0)
             {
-                sqLiteRepo.InsertAllJoystics(iJoysticList);
+                sqLiteRepo.InsertAllJoysticks(iJoystickList);
             }
             return Task.CompletedTask;
         }
@@ -83,7 +83,7 @@ namespace Publisher.Controllers
         [HttpPost("cleanDatabase")]
         public Task CleanDatabase()
         {
-            sqLiteRepo.ClearAllJoystics();
+            sqLiteRepo.ClearAllJoysticks();
             return Task.CompletedTask;
         }
 

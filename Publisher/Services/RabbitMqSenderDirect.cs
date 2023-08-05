@@ -19,7 +19,7 @@ namespace Publisher.Services
             _queueName = _configuration["RabbitMQQuueName"];
         }
 
-        public Task Send(IList<Joystic> message)
+        public Task Send(IList<Joystick> message)
         {
             // Establish a connection to the message broker using the connection factory.
             using var connection = _connectionFactory.CreateConnection();
@@ -34,8 +34,8 @@ namespace Publisher.Services
                                  autoDelete: false,
                                  arguments: null);
 
-            // Iterate through each Joystic object in the provided message list.
-            foreach (Joystic joystic in message)
+            // Iterate through each Joystickk object in the provided message list.
+            foreach (Joystick Joystick in message)
             {
                 // Generate a new unique identifier (GUID) for the message.
                 var id = Guid.NewGuid();
@@ -44,8 +44,8 @@ namespace Publisher.Services
                 channel.BasicPublish(exchange: "",
                                      routingKey: _queueName,
                                      basicProperties: null,
-                                     body: Encoding.UTF8.GetBytes(String.Join(",", joystic.time, joystic.axis_1, joystic.axis_2,
-                                                                            joystic.button_1, joystic.button_2, id.ToString())));
+                                     body: Encoding.UTF8.GetBytes(String.Join(",", Joystick.time, Joystick.axis_1, Joystick.axis_2,
+                                                                            Joystick.button_1, Joystick.button_2, id.ToString())));
             }
 
             // Indicate the completion of the message sending process.
