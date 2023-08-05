@@ -24,7 +24,6 @@ namespace AzureServiceBusSubscriber
             try
             {
                 var messageReceivedTaskCompletionSource = new TaskCompletionSource<string>();
-
                 var queueClient = new QueueClient(_configuration["AZURE_CONNECTION_STRING"], _configuration["Azure_QueueName"], ReceiveMode.PeekLock);
 
                 queueClient.RegisterMessageHandler(
@@ -58,16 +57,16 @@ namespace AzureServiceBusSubscriber
         public async Task<IActionResult> GetAllData()
         {
             List<string> receivedMessages = new List<string>();
-            int targetMessageCount = 3000;
+            int targetMessageCount = 300000;
             int maxWaitSeconds = 60; 
             try
             {
                 var queueClient = new QueueClient(_configuration["AZURE_CONNECTION_STRING"], _configuration["Azure_QueueName"], ReceiveMode.PeekLock);
 
-                var messageHandlerOptions = new MessageHandlerOptions(async args => Console.WriteLine(args.Exception))
+                var messageHandlerOptions = new MessageHandlerOptions(async args => throw args.Exception)
                 {
-                    AutoComplete = true,
-                    MaxConcurrentCalls = 50
+                    AutoComplete = false,
+                    MaxConcurrentCalls = 50, 
                 };
 
                 var messageReceivedTaskCompletionSource = new TaskCompletionSource<bool>();
@@ -90,7 +89,7 @@ namespace AzureServiceBusSubscriber
                     }
                 }, messageHandlerOptions);
 
-                await Task.WhenAny(messageReceivedTaskCompletionSource.Task, Task.Delay(TimeSpan.FromSeconds(maxWaitSeconds)));
+                await messageReceivedTaskCompletionSource.Task;
 
                 await queueClient.CloseAsync();
             }

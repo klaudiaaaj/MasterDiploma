@@ -79,5 +79,13 @@ namespace Publisher.Controllers
             }
             return Task.CompletedTask;
         }
+
+        [HttpPost("cleanDatabase")]
+        public Task CleanDatabase()
+        {
+            sqLiteRepo.ClearAllJoystics();
+            return Task.CompletedTask;
+        }
+
     }
 }

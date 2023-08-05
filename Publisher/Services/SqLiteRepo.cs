@@ -1,7 +1,10 @@
 ﻿
 
 using Contracts.Models;
+using System;
 using System.Data.SQLite;
+using static IronPython.Modules._ast;
+using System.Diagnostics.Metrics;
 
 namespace Publisher.Services
 {
@@ -64,7 +67,7 @@ namespace Publisher.Services
         {
             List<Joystic> joystics = new List<Joystic>();
 
-         string selectQuery = "SELECT * FROM Joystics LIMIT 300000";
+            string selectQuery = "SELECT * FROM Joystics";
             using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, this.sqlite_conn))
             {
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
@@ -123,19 +126,47 @@ namespace Publisher.Services
 
         public void InsertAllJoystics(IList<Joystic> joystics)
         {
-            string insertQuery = "INSERT INTO Joystics (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
-            using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, this.sqlite_conn))
+            try
             {
-                foreach (Joystic joystic in joystics)
+                // SQL query to insert data into the 'Joystics' table
+                string insertQuery = "INSERT INTO Joystics (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, this.sqlite_conn))
                 {
-                    cmd.Parameters.AddWithValue("@Time", joystic.time);
-                    cmd.Parameters.AddWithValue("@Axis_1", joystic.axis_1);
-                    cmd.Parameters.AddWithValue("@Axis_2", joystic.axis_2);
-                    cmd.Parameters.AddWithValue("@Button_1", joystic.button_1);
-                    cmd.Parameters.AddWithValue("@Button_2", joystic.button_2);
-                    cmd.Parameters.Clear();
+                    // Add parameters outside the loop for SQL query parameterization
+                    cmd.Parameters.Add(new SQLiteParameter("@Time"));
+                    cmd.Parameters.Add(new SQLiteParameter("@Axis_1"));
+                    cmd.Parameters.Add(new SQLiteParameter("@Axis_2"));
+                    cmd.Parameters.Add(new SQLiteParameter("@Button_1"));
+                    cmd.Parameters.Add(new SQLiteParameter("@Button_2"));
+
+                    // Execute the command multiple times in a single transaction
+                    using (var transaction = this.sqlite_conn.BeginTransaction())
+                    {
+                        foreach (Joystic joystic in joystics)
+                        {
+                            // Set parameter values inside the loop for each Joystic object
+                            cmd.Parameters["@Time"].Value = joystic.time;
+                            cmd.Parameters["@Axis_1"].Value = joystic.axis_1;
+                            cmd.Parameters["@Axis_2"].Value = joystic.axis_2;
+                            cmd.Parameters["@Button_1"].Value = joystic.button_1;
+                            cmd.Parameters["@Button_2"].Value = joystic.button_2;
+
+                            // Execute the SQL command to insert data into the table
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Commit the transaction to persist changes in the database
+                        transaction.Commit();
+                    }
                 }
-                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
             }
         }
         public Joystic GetJoysticById(int id)
@@ -144,7 +175,6 @@ namespace Publisher.Services
             using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, this.sqlite_conn))
             {
                 cmd.Parameters.AddWithValue("@Id", id);
-
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
@@ -164,7 +194,23 @@ namespace Publisher.Services
                 }
             }
 
-            return null; 
+            return null;
         }
+        public void ClearAllJoystics()
+        {
+            try
+            {
+                string deleteQuery = "DELETE FROM Joystics";
+                using (SQLiteCommand cmd = new SQLiteCommand(deleteQuery, this.sqlite_conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

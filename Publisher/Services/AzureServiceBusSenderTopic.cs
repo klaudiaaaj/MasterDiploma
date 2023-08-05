@@ -8,9 +8,6 @@ namespace Publisher.Services
 {
     public class AzureServiceBusSenderTopic : IAzureServiceBusSenderTopic
     {
-        private string ConnectionString = ""; //hidden
-                                              // private readonly ServiceBusClient client;
-                                              //  private readonly ServiceBusSender sender;
         private readonly IConfiguration _configuration;
 
         public AzureServiceBusSenderTopic(IConfiguration configuration)
@@ -20,9 +17,6 @@ namespace Publisher.Services
             {
                 TransportType = ServiceBusTransportType.AmqpWebSockets
             };
-            //   var tokenCredential = new VisualStudioCredential(new VisualStudioCredentialOptions { TenantId = "ab840be7-206b-432c-bd22-4c20fdc1b261" });
-            // client = new ServiceBusClient(_configuration[", tokenCredential);
-            // sender = client.CreateSender(_configuration["Azure_QueueName"]);
         }
 
         public async Task Send(IList<Joystic> message)

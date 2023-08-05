@@ -26,7 +26,7 @@ namespace Publisher.Services
                 using (var csv = new CsvReader(reader, config))
                 {
                     var joystickData = csv.GetRecords<Joystic>();
-                    foreach (var joystick in joystickData.Take(3000))
+                    foreach (var joystick in joystickData.Take(300000))
                     {
                         joysticData2.Add(joystick);
                     }
