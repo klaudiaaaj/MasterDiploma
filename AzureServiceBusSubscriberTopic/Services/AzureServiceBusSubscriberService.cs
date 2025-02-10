@@ -1,7 +1,5 @@
 ﻿using Azure.Identity;
 using Azure.Messaging.ServiceBus;
-using Contracts.Models;
-using System.Text.Json;
 
 namespace AzureServiceBusSubscriber.Services
 {

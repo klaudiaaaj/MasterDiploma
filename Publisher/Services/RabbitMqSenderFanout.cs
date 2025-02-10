@@ -26,11 +26,13 @@ namespace Publisher.Services
 
         public Task Send(IList<Joystick> message)
         {
+            // Create a connection to the RabbitMQ server
             using var connection = _connectionFactory.CreateConnection();
+
             using var channel = connection.CreateModel();
 
             channel.ExchangeDeclare(exchange: "my-fanout-exchange", type: ExchangeType.Fanout);
-          
+
             channel.QueueDeclare("consumer1", durable: false, autoDelete: false, exclusive: false);
             channel.QueueDeclare("consumer2", durable: false, autoDelete: false, exclusive: false);
             channel.QueueDeclare("consumer3", durable: false, autoDelete: false, exclusive: false);
@@ -43,17 +45,17 @@ namespace Publisher.Services
             channel.QueueBind("consumer4", "my-fanout-exchange", "");
             channel.QueueBind("consumer5", "my-fanout-exchange", "");
 
-
-            foreach (Joystick Joystick in message)
+            foreach (Joystick joystick in message)
             {
                 var id = Guid.NewGuid();
                 channel.BasicPublish(exchange: "my-fanout-exchange",
-                                                routingKey: "",
-                                                basicProperties: null,
-                                                body: Encoding.UTF8.GetBytes(String.Join(",", Joystick.time, Joystick.axis_1, Joystick.axis_2, Joystick.button_1, Joystick.button_2, id.ToString())));
+                                     routingKey: "",
+                                     basicProperties: null,
+                                     body: Encoding.UTF8.GetBytes(String.Join(",", joystick.time, joystick.axis_1, joystick.axis_2, joystick.button_1, joystick.button_2, Guid.NewGuid().ToString())));
             }
 
             return Task.CompletedTask;
         }
+
     }
 }

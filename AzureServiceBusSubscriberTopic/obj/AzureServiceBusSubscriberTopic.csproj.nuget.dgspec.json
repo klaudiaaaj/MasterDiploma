@@ -59,10 +59,6 @@
               "target": "Package",
               "version": "[7.15.0, )"
             },
-            "Microsoft.AspNet.WebApi.Core": {
-              "target": "Package",
-              "version": "[5.2.9, )"
-            },
             "Microsoft.Azure.ServiceBus": {
               "target": "Package",
               "version": "[5.2.0, )"

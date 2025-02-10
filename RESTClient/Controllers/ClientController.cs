@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Contracts.Models;
+using Microsoft.AspNetCore.Mvc;
+using RESTClient.Services;
 
 namespace RESTClient.cs.Controllers
 {
@@ -8,11 +10,12 @@ namespace RESTClient.cs.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ClientController> _logger;
-
-        public ClientController(IHttpClientFactory httpClientFactory, ILogger<ClientController> logger)
+        private readonly IRosContractor rosContractor;
+        public ClientController(IHttpClientFactory httpClientFactory, ILogger<ClientController> logger, IRosContractor rosContractor)
         {
             _httpClient = httpClientFactory.CreateClient();
             _logger = logger;
+            this.rosContractor = rosContractor;
         }
 
         [HttpGet("all")]
@@ -43,28 +46,33 @@ namespace RESTClient.cs.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDataById(string id)
         {
-            // Send an HTTP GET request to an external REST API
             var response = await _httpClient.GetAsync($"http://host.docker.internal:8080/api/publisher/RESTDataProvider/GetById/{id}");
 
-            // Check if the HTTP response is successful
             if (response.IsSuccessStatusCode)
             {
-                // Read the content of the response as a string
                 var data = await response.Content.ReadAsStringAsync();
-
-                // Log the retrieved data
-                _logger.LogInformation(data.ToString());
-
-                // Return the retrieved data as a successful response
                 return Ok(data);
             }
             else
             {
-                // Log an error message with the response status
-                _logger.LogError("Error", response.ToString());
-
-                // Return a response with the same status code as the external API response
                 return StatusCode((int)response.StatusCode);
+            }
+        }
+        [HttpPost("object")]
+        public async Task<IActionResult> GetObjectAsync([FromBody] string data)
+        {
+            try
+            {
+                if (data != null)
+                {
+                   rosContractor.GazeboContractor(data);
+                }
+                await Task.Run(() => _logger.LogInformation(data));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Wystąpił błąd podczas przetwarzania danych.");
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Publisher.Services;
+﻿using Publisher.Controllers;
+using Publisher.Services;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IAzureServiceBusSender, AzureServiceBusSenderQueue>()
 builder.Services.AddScoped<IAzureServiceBusSenderTopic, AzureServiceBusSenderTopic>();
 builder.Services.AddScoped<IDataProducerService, DataProducerService>();
 builder.Services.AddSingleton<ISqLiteRepo, SqLiteRepo>();
+builder.Services.AddHttpClient<RESTProducer>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

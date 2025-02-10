@@ -128,35 +128,29 @@ namespace Publisher.Services
         {
             try
             {
-                // SQL query to insert data into the 'Joysticks' table
                 string insertQuery = "INSERT INTO Joysticks (Time, Axis_1, Axis_2, Button_1, Button_2) VALUES (@Time, @Axis_1, @Axis_2, @Button_1, @Button_2)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, this.sqlite_conn))
                 {
-                    // Add parameters outside the loop for SQL query parameterization
                     cmd.Parameters.Add(new SQLiteParameter("@Time"));
                     cmd.Parameters.Add(new SQLiteParameter("@Axis_1"));
                     cmd.Parameters.Add(new SQLiteParameter("@Axis_2"));
                     cmd.Parameters.Add(new SQLiteParameter("@Button_1"));
                     cmd.Parameters.Add(new SQLiteParameter("@Button_2"));
 
-                    // Execute the command multiple times in a single transaction
                     using (var transaction = this.sqlite_conn.BeginTransaction())
                     {
                         foreach (Joystick Joystick in Joysticks)
                         {
-                            // Set parameter values inside the loop for each Joystick object
                             cmd.Parameters["@Time"].Value = Joystick.time;
                             cmd.Parameters["@Axis_1"].Value = Joystick.axis_1;
                             cmd.Parameters["@Axis_2"].Value = Joystick.axis_2;
                             cmd.Parameters["@Button_1"].Value = Joystick.button_1;
                             cmd.Parameters["@Button_2"].Value = Joystick.button_2;
 
-                            // Execute the SQL command to insert data into the table
                             cmd.ExecuteNonQuery();
                         }
 
-                        // Commit the transaction to persist changes in the database
                         transaction.Commit();
                     }
                 }

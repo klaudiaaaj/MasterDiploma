@@ -1,5 +1,6 @@
 
 using RESTClient.cs.Controllers;
+using RESTClient.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<ClientController>();
+builder.Services.AddSingleton<IRosContractor, RosContractor>();
 
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()

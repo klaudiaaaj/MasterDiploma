@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Contracts.Models;
+using RabbitmqSubscriber.Services;
 using System.Text.Json;
 
 namespace AzureServiceBusSubscriber.Services
@@ -12,8 +13,11 @@ namespace AzureServiceBusSubscriber.Services
         private readonly ServiceBusSender sender;
         private readonly IConfiguration _configuration;
         ServiceBusProcessor processor;
+        private readonly IRosContractor ros;
 
-        public AzureServiceBusSubscriberService(IConfiguration configuration)
+        private readonly ILogger<AzureServiceBusSubscriberService> _logger;
+
+        public AzureServiceBusSubscriberService(IConfiguration configuration, ILogger<AzureServiceBusSubscriberService> logger, IRosContractor ros)
         {
             _configuration = configuration;
             var clientOptions = new ServiceBusClientOptions()
@@ -22,11 +26,13 @@ namespace AzureServiceBusSubscriber.Services
             };
             var tokenCredential = new VisualStudioCredential(new VisualStudioCredentialOptions { TenantId = "ab840be7-206b-432c-bd22-4c20fdc1b261" });
             client = new ServiceBusClient(_configuration["AzureConnectionString"], tokenCredential);
-            sender = client.CreateSender(_configuration["Azure_QueueName"]);
-            processor = client.CreateProcessor(_configuration["Azure_QueueName"], new ServiceBusProcessorOptions());
+            sender = client.CreateSender(_configuration["Azure_QueueName_Background"]);
+            processor = client.CreateProcessor(_configuration["Azure_QueueName_Background"], new ServiceBusProcessorOptions());
+            _logger = logger;
+            this.ros = ros;
         }
 
-   
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // add handler to process messages
@@ -42,17 +48,17 @@ namespace AzureServiceBusSubscriber.Services
             Console.ReadKey();
 
             // stop processing 
-            Console.WriteLine("\nStopping the receiver...");
             await processor.StopProcessingAsync();
-            Console.WriteLine("Stopped receiving messages");
         }
         async Task MessageHandler(ProcessMessageEventArgs args)
         {
             string body = args.Message.Body.ToString();
-            Console.WriteLine($"Received: {body}");
 
             // complete the message. message is deleted from the queue. 
             await args.CompleteMessageAsync(args.Message);
+            await Task.Run(() => _logger.LogInformation(body));
+            ros.GazeboContractor(body);
+
         }
         Task ErrorHandler(ProcessErrorEventArgs args)
         {

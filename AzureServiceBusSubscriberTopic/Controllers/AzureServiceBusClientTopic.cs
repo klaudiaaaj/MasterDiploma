@@ -1,6 +1,5 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using AzureServiceBusSubscriberQueue.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.ServiceBus;
 using System.Text;
 
 namespace AzureServiceBusSubscriber
@@ -13,13 +12,14 @@ namespace AzureServiceBusSubscriber
         private readonly IConfiguration _configuration;
         private readonly string _subscriptionName = string.Empty;
         private readonly ILogger<AzureServiceBusClientTopic> _logger;
-        public AzureServiceBusClientTopic(IConfiguration configuration, ILogger<AzureServiceBusClientTopic> logger)
+        private readonly IAzureServiceBusConnectionFactory azureServiceBusConnectionFactory;
+        public AzureServiceBusClientTopic(IConfiguration configuration, ILogger<AzureServiceBusClientTopic> logger, IAzureServiceBusConnectionFactory azureServiceBusGetConnection)
         {
             _configuration = configuration;
-            _subscriptionName = "sub1";
             //_subscriptionName = Environment.GetEnvironmentVariable("SUBSCRIPTION_NAME");
             _logger = logger;
             _logger.LogInformation(_subscriptionName);
+            this.azureServiceBusConnectionFactory = azureServiceBusGetConnection;
         }
 
         [HttpGet("all")]
@@ -29,13 +29,10 @@ namespace AzureServiceBusSubscriber
 
             try
             {
-                await using var serviceBusClient = new ServiceBusClient(_configuration["AzureConnectionStringTopic"]);
-                await using var receiver = serviceBusClient.CreateReceiver(_configuration["AzureTopic"], _subscriptionName);
-
                 int batchSize = 256;
                 while (true)
                 {
-                    var messages = await receiver.ReceiveMessagesAsync(batchSize, TimeSpan.FromMinutes(2));
+                    var messages = await azureServiceBusConnectionFactory.messageReciver.ReceiveMessagesAsync(batchSize, TimeSpan.FromMinutes(2));
 
                     if (messages.Count == 0)
                     {
@@ -47,13 +44,13 @@ namespace AzureServiceBusSubscriber
                         var messageBody = Encoding.UTF8.GetString(message.Body);
                         messagesResult.Add(messageBody);
 
-                        await receiver.CompleteMessageAsync(message);
+                        await azureServiceBusConnectionFactory.messageReciver.CompleteMessageAsync(message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception occurred during message processing: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
 
             return Ok(messagesResult);
@@ -61,17 +58,13 @@ namespace AzureServiceBusSubscriber
         [HttpGet("single")]
         public async Task<IActionResult> GetSingleData()
         {
-            List<string> messagesResult = new List<string>();
             try
             {
-                await using var serviceBusClient = new ServiceBusClient(_configuration["AzureConnectionStringTopic"]);
-                await using var receiver = serviceBusClient.CreateReceiver(_configuration["AzureTopic"], _subscriptionName);
-
-                var messages = await receiver.ReceiveMessagesAsync(1, TimeSpan.FromMinutes(2));
+                var messages = await azureServiceBusConnectionFactory.messageReciver.ReceiveMessagesAsync(1, TimeSpan.FromMinutes(2));
                 if (messages != null)
                 {
                     var message = messages.FirstOrDefault();
-                    await receiver.CompleteMessageAsync(message);
+                    await azureServiceBusConnectionFactory.messageReciver.CompleteMessageAsync(message);
                     return Ok(Encoding.UTF8.GetString(message.Body));
                 }
 
@@ -79,9 +72,8 @@ namespace AzureServiceBusSubscriber
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
-
         }
     }
 }

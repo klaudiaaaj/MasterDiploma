@@ -1,7 +1,0 @@
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\MetricsAnalyser.exe
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\appsettings.Development.json
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\appsettings.json
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\MetricsAnalyser.dll
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\MetricsAnalyser.deps.json
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\MetricsAnalyser.runtimeconfig.json
-C:\Users\klaud\source\repos\ROSSubscriber\Master\publisher\MetricsAnalyser\bin\Release\net6.0\publish\MetricsAnalyser.pdb

@@ -24,23 +24,18 @@ namespace Publisher.Services
             // Establish a connection to the message broker using the connection factory.
             using var connection = _connectionFactory.CreateConnection();
 
-            // Create a channel within the established connection to interact with the message broker.
             using var channel = connection.CreateModel();
 
-            // Declare a message queue with specific properties.
             channel.QueueDeclare(queue: _queueName,
                                  durable: false,
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
 
-            // Iterate through each Joystickk object in the provided message list.
             foreach (Joystick Joystick in message)
             {
-                // Generate a new unique identifier (GUID) for the message.
                 var id = Guid.NewGuid();
 
-                // Publish a message to the specified queue.
                 channel.BasicPublish(exchange: "",
                                      routingKey: _queueName,
                                      basicProperties: null,
@@ -48,7 +43,6 @@ namespace Publisher.Services
                                                                             Joystick.button_1, Joystick.button_2, id.ToString())));
             }
 
-            // Indicate the completion of the message sending process.
             return Task.CompletedTask;
         }
 

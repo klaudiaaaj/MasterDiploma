@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RabbitmqSubscriber.Services
 {
-    public class RosContractor
+    public class RosContractor : IRosContractor
     {
         private const string pathToFunction = "C:/Users/klaud/Desktop/GazeboContractor.py";
         public async Task GazeboContractor(string dataString)

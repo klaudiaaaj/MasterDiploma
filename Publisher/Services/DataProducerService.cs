@@ -8,7 +8,7 @@ namespace Publisher.Services
 {
     public class DataProducerService : IDataProducerService
     {
-        string _sheetPath = @"Joystickk_data.csv";
+        string _sheetPath = @"joystick_data.csv";
 
         public IList<Joystick> GetJoystickData()
         {
@@ -26,7 +26,7 @@ namespace Publisher.Services
                 using (var csv = new CsvReader(reader, config))
                 {
                     var JoystickkData = csv.GetRecords<Joystick>();
-                    foreach (var Joystickk in JoystickkData.Take(300000))
+                    foreach (var Joystickk in JoystickkData.Take(50000))
                     {
                         JoystickData2.Add(Joystickk);
                     }

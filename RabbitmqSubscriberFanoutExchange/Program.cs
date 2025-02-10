@@ -1,4 +1,5 @@
 using RabbitmqSubscriber.Services;
+using RabbitmqSubscriberDirectExchange.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<IRabbitMqSubscriberService, RabbitMqSubscriberService>();
+builder.Services.AddSingleton<IRabbitMqConnectionFactory, RabbitMqConnectionFactory>();
 
 var app = builder.Build();
 

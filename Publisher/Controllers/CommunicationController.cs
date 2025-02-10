@@ -87,5 +87,11 @@ namespace Publisher.Controllers
             return Task.CompletedTask;
         }
 
+        [HttpPost("cleanAzure")]
+        public Task cleanAzure()
+        {
+            return Task.CompletedTask;
+        }
+
     }
 }

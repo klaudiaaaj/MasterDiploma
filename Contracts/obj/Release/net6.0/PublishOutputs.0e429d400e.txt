@@ -1,5 +1,0 @@
-C:\Users\klaud\source\repos\ROSSubscriber\Master\Publisher\Contracts\bin\Release\net6.0\publish\Contracts.exe
-C:\Users\klaud\source\repos\ROSSubscriber\Master\Publisher\Contracts\bin\Release\net6.0\publish\Contracts.dll
-C:\Users\klaud\source\repos\ROSSubscriber\Master\Publisher\Contracts\bin\Release\net6.0\publish\Contracts.deps.json
-C:\Users\klaud\source\repos\ROSSubscriber\Master\Publisher\Contracts\bin\Release\net6.0\publish\Contracts.runtimeconfig.json
-C:\Users\klaud\source\repos\ROSSubscriber\Master\Publisher\Contracts\bin\Release\net6.0\publish\Contracts.pdb
